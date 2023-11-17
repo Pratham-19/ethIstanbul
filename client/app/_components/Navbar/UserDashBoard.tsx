@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -39,6 +38,7 @@ const UserDashBoard = () => {
 
   useEffect(() => {
     const getPath = menu.find((item) => item.link === pathname);
+    if (!getPath) return;
     switch (getPath.name) {
       case "Dashboard":
         setShowDashboard(true);
