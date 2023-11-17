@@ -1,7 +1,16 @@
+"use client";
+
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const UserDashBoard = () => {
+  const pathname = usePathname();
+  const [showDashboard, setShowDashboard] = useState(true);
+  const [showQuest, setShowQuest] = useState(false);
+  const [showMarketplace, setShowMarketplace] = useState(false);
+
   const menu: {
     name: string;
     icon: string;
@@ -12,21 +21,46 @@ const UserDashBoard = () => {
       name: "Dashboard",
       icon: "/dashboard.svg",
       link: "/user/dashboard",
-      isActive: true,
+      isActive: showDashboard,
     },
     {
       name: "Quests",
       icon: "/quest-nav.svg",
-      link: "/user/dashboard",
-      isActive: false,
+      link: "/user/quest",
+      isActive: showQuest,
     },
     {
       name: "Marketplace",
       icon: "/marketplace.svg",
-      link: "/user/dashboard",
-      isActive: false,
+      link: "/user/marketplace",
+      isActive: showMarketplace,
     },
   ];
+
+  useEffect(() => {
+    const getPath = menu.find((item) => item.link === pathname);
+    switch (getPath.name) {
+      case "Dashboard":
+        setShowDashboard(true);
+        setShowQuest(false);
+        setShowMarketplace(false);
+        break;
+      case "Quests":
+        setShowDashboard(false);
+        setShowQuest(true);
+        setShowMarketplace(false);
+        break;
+      case "Marketplace":
+        setShowDashboard(false);
+        setShowQuest(false);
+        setShowMarketplace(true);
+        break;
+      default:
+        setShowDashboard(true);
+        setShowQuest(false);
+        setShowMarketplace(false);
+    }
+  }, [pathname]);
   return (
     <div className="bg-[hsl(var(--primary))] w-full h-[calc(100vh-1rem)]  lg:h-[calc(100vh-2rem)] rounded-2xl overflow-hidden">
       <div className="h-[29%] relative">
@@ -62,7 +96,8 @@ const UserDashBoard = () => {
         </section>
         <section>
           {menu.map((item) => (
-            <div
+            <Link
+              href={item.link}
               className={`flex items-center space-x-2 my-3 justify-start text-center pl-4 ${
                 item.isActive ? "border-l-4 " : ""
               } cursor-pointer hover:scale-[1.03] transition-transform duration-300`}
@@ -76,7 +111,7 @@ const UserDashBoard = () => {
                 className="w-6 h-6"
               />
               <h2>{item.name}</h2>
-            </div>
+            </Link>
           ))}
         </section>
         <section className="w-full bg-[hsl(var(--secondary))] flex flex-col items-center  mx-auto rounded-xl text-center pt-3 pb-7 h-[51%]">
@@ -90,7 +125,7 @@ const UserDashBoard = () => {
             />
             <h2>ChatRooms</h2>
           </span>
-          <div className="flex flex-col mx-auto my-1">
+          <div className="flex flex-col mx-auto my-1 mt-3">
             <h2 className="my-2 cursor-pointer hover:scale-[1.03] transition-transform duration-300">
               # elpolloloco
             </h2>
