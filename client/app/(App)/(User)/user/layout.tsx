@@ -8,14 +8,14 @@ export default function UserLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex justify-between mx-auto w-full max-w-screen-xl max-h-screen py-2 px-4  md:px-6 lg:py-4 space-x-2 overflow-hidden">
+    <div className="flex justify-between mx-auto w-full max-w-screen-xl max-h-screen py-2 px-4  md:px-6 lg:py-4 space-x-2 ">
       <div className="basis-[20%]">
         <UserDashBoard />
       </div>
       <div className="basis-[80%] relative">
         <Navbar className="" />
         {children}
-        <Footer className="absolute bottom-0" />
+        {/* <Footer className="absolute bottom-0" /> */}
       </div>
     </div>
   );
