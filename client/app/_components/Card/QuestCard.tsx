@@ -9,8 +9,8 @@ const QuestCard = () => {
         <Image
           src="/quest-hen.png"
           alt="hen-quest"
-          width={254}
-          height={254}
+          width={1024}
+          height={1024}
           className="rounded-xl px-2 py-1 my-auto"
         />
       </section>
