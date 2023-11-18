@@ -350,7 +350,7 @@ const Create = () => {
                 questName,
                 "this is a sample quest"
               );
-
+              console.log(tokenUri);
               const { request } = await prepareWriteContract({
                 address: EscrowAccount.address as `0x${string}`,
                 abi: EscrowAccount.abi,
@@ -362,6 +362,7 @@ const Create = () => {
               await waitForTransaction({ hash })
                 .then(() => console.log("transaction confirmed"))
                 .catch((error) => {
+                  toast.dismiss("uploading");
                   console.log("error", error);
                 });
               toast.dismiss("uploading");
