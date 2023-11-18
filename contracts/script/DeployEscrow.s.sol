@@ -6,7 +6,7 @@ import {console} from "forge-std/console.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
 import {Escrow} from "../src/Escrow.sol";
 
-contract DeployNFTDrop is Script {
+contract DeployEscrow is Script {
     HelperConfig public helperConfig;
     Escrow public escrow;
 
