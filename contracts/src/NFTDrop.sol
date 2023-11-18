@@ -21,8 +21,8 @@ contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
 
     uint256 constant MIN_RANGE = 0;
     uint256 constant MAX_RANGE = 10;
-    bytes32 public constant END_POINT_ID_UINT256 = 0x94555f83f1addda23fdaa7c74f27ce2b764ed5cc430c66f5ff1bcf39d583da36;
-    address public constant AIR_NODE_ADDRESS = 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D;
+    bytes32 public immutable i_endPointIdUint256;
+    address public immutable i_airNodeAddress;
 
     uint256 public immutable i_interval;
 
@@ -46,10 +46,14 @@ contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
         string memory symbol,
         uint256 _interval,
         address _airnodeRrp,
+        address _airNodeAddress,
+        bytes32 _endPointIdUint256,
         address _automate,
         address _taskCreator
     ) ERC721(name, symbol) RrpRequesterV0(_airnodeRrp) AutomateReady(_automate, _taskCreator) {
         i_interval = _interval;
+        i_airNodeAddress = _airNodeAddress;
+        i_endPointIdUint256 = _endPointIdUint256;
         s_lastTimeStamp = block.timestamp;
     }
 
@@ -106,8 +110,8 @@ contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
 
     function requestQuantumon(address _user) public returns (bytes32) {
         bytes32 requestId = airnodeRrp.makeFullRequest(
-            AIR_NODE_ADDRESS,
-            END_POINT_ID_UINT256,
+            i_airNodeAddress,
+            i_endPointIdUint256,
             address(this),
             s_sponsorWallet,
             address(this),
@@ -133,7 +137,7 @@ contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
     }
 
     function withdraw() external {
-        airnodeRrp.requestWithdrawal(AIR_NODE_ADDRESS, s_sponsorWallet);
+        airnodeRrp.requestWithdrawal(i_airNodeAddress, s_sponsorWallet);
     }
 
     ///////////////////////////
