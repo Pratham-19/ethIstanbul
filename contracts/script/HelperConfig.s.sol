@@ -6,10 +6,10 @@ import {Script} from "forge-std/Script.sol";
 contract HelperConfig is Script {
     struct NetworkConfig {
         address _airnodeRrp;
-        address _airnodeAddress;
-        bytes32 _endpointIdUint256;
         address _registryAddress;
         address _implementationAddress;
+        address _automate;
+        address _taskCreator;
     }
 
     NetworkConfig public activeNetworkConfig;
@@ -34,16 +34,31 @@ contract HelperConfig is Script {
         if (block.chainid == 80001) {
             activeNetworkConfig = getMumbaiConfigs();
             deployer_key = DEV_PRIVATE_KEY;
+        } else if (block.chainid == 100) {
+            activeNetworkConfig = getXDaiConfigs();
+            deployer_key = DEV_PRIVATE_KEY;
+        } else {
+            revert("Invalid network");
         }
     }
 
     function getMumbaiConfigs() public pure returns (NetworkConfig memory mumbaiConfigs) {
         mumbaiConfigs = NetworkConfig({
             _airnodeRrp: 0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd,
-            _airnodeAddress: 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D,
-            _endpointIdUint256: 0x94555f83f1addda23fdaa7c74f27ce2b764ed5cc430c66f5ff1bcf39d583da36,
             _registryAddress: 0x000000006551c19487814612e58FE06813775758,
-            _implementationAddress: 0x41C8f39463A868d3A88af00cd0fe7102F30E44eC
+            _implementationAddress: 0x41C8f39463A868d3A88af00cd0fe7102F30E44eC,
+            _automate: 0xB3f5503f93d5Ef84b06993a1975B9D21B962892F,
+            _taskCreator: 0x527a819db1eb0e34426297b03bae11F2f8B3A19E
+        });
+    }
+
+    function getXDaiConfigs() public pure returns (NetworkConfig memory gnosisConfigs) {
+        gnosisConfigs = NetworkConfig({
+            _airnodeRrp: 0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd,
+            _registryAddress: 0x000000006551c19487814612e58FE06813775758,
+            _implementationAddress: 0x41C8f39463A868d3A88af00cd0fe7102F30E44eC,
+            _automate: 0x8aB6aDbC1fec4F18617C9B889F5cE7F28401B8dB,
+            _taskCreator: 0x04462c8ad55a3d970fd9b4944A2f4C7c15700883
         });
     }
 }

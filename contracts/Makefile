@@ -41,6 +41,10 @@ ifeq ($(findstring --network mumbai,$(ARGS)),--network mumbai)
 	NETWORK_ARGS := --rpc-url $(MUMBAI_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(POLYGON_SCAN_API_KEY) --legacy
 endif
 
+ifeq ($(findstring --network gnosis,$(ARGS)),--network gnosis)
+	NETWORK_ARGS := --rpc-url $(GNOSIS_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(GONSIS_SCAN_API_KEY) --legacy
+endif
+
 deployNFTDrop:
 	@forge script script/DeployNFTDrop.s.sol:DeployNFTDrop $(NETWORK_ARGS)
 

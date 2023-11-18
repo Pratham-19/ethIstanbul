@@ -6,8 +6,9 @@ import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 import {RrpRequesterV0} from "@api3/contracts/rrp/requesters/RrpRequesterV0.sol";
+import {AutomateReady} from "@gelato/contracts/integrations/AutomateReady.sol";
 
-contract NFTDrop is ERC721, RrpRequesterV0 {
+contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
     event NFTDrop__RequestedUint256(bytes32 indexed requestId);
     event NFTDrop__ReceivedUint256(bytes32 indexed requestId, uint256 indexed response);
     event NFTDrop__SetBaseURI(string baseURI);
@@ -20,20 +21,16 @@ contract NFTDrop is ERC721, RrpRequesterV0 {
 
     uint256 constant MIN_RANGE = 0;
     uint256 constant MAX_RANGE = 10;
+    bytes32 public constant END_POINT_ID_UINT256 = 0x94555f83f1addda23fdaa7c74f27ce2b764ed5cc430c66f5ff1bcf39d583da36;
+    address public constant AIR_NODE_ADDRESS = 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D;
+
     uint256 public immutable i_interval;
-    address public immutable i_airnodeAddress;
 
     address public s_sponsorWallet;
-    bytes32 public s_endpointIdUint256;
     uint256 public s_lastTimeStamp;
     uint256 public s_qrngUint256;
     uint256[9958] public s_ids; //Array to store the Quantomon Id - This is different from the tokenId
-    address[] public s_users = [
-        0xa60f738a60BCA515Ac529b7335EC7CB2eE3891d2,
-        0xdDCc06f98A7C71Ab602b8247d540dA5BD8f5D2A2,
-        0x566771D19FD088eE190e37C38d530a71453A5A31,
-        0xbd394F796af6dBF94896D7F0e43524b53F32199d
-    ];
+    address[] public s_users;
 
     // Mapping that maps the requestId for a random number to the fullfillment status of that request
     mapping(bytes32 => bool) public s_expectingRequestWithIdToBeFulfilled;
@@ -49,13 +46,11 @@ contract NFTDrop is ERC721, RrpRequesterV0 {
         string memory symbol,
         uint256 _interval,
         address _airnodeRrp,
-        address _airnodeAddress,
-        bytes32 _endpointIdUint256
-    ) ERC721(name, symbol) RrpRequesterV0(_airnodeRrp) {
+        address _automate,
+        address _taskCreator
+    ) ERC721(name, symbol) RrpRequesterV0(_airnodeRrp) AutomateReady(_automate, _taskCreator) {
         i_interval = _interval;
-        i_airnodeAddress = _airnodeAddress;
         s_lastTimeStamp = block.timestamp;
-        s_endpointIdUint256 = _endpointIdUint256;
     }
 
     function setSponsorWallet(address _sponsorWallet) external {
@@ -66,6 +61,10 @@ contract NFTDrop is ERC721, RrpRequesterV0 {
     function setBaseURI(string memory baseURI) external {
         _baseURIextended = baseURI;
         emit NFTDrop__SetBaseURI(_baseURIextended);
+    }
+
+    function setUsers(address[] memory userAddresses) external {
+        s_users = userAddresses;
     }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
@@ -107,8 +106,8 @@ contract NFTDrop is ERC721, RrpRequesterV0 {
 
     function requestQuantumon(address _user) public returns (bytes32) {
         bytes32 requestId = airnodeRrp.makeFullRequest(
-            i_airnodeAddress,
-            s_endpointIdUint256,
+            AIR_NODE_ADDRESS,
+            END_POINT_ID_UINT256,
             address(this),
             s_sponsorWallet,
             address(this),
@@ -134,7 +133,7 @@ contract NFTDrop is ERC721, RrpRequesterV0 {
     }
 
     function withdraw() external {
-        airnodeRrp.requestWithdrawal(i_airnodeAddress, s_sponsorWallet);
+        airnodeRrp.requestWithdrawal(AIR_NODE_ADDRESS, s_sponsorWallet);
     }
 
     ///////////////////////////
@@ -163,4 +162,6 @@ contract NFTDrop is ERC721, RrpRequesterV0 {
     function _baseURI() internal view virtual override returns (string memory) {
         return _baseURIextended;
     }
+
+    receive() external payable {}
 }

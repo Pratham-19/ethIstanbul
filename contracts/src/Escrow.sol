@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.18;
 
+import {NFTDrop} from "./NFTDrop.sol";
+import {QuestNFT} from "./QuestNFT.sol";
+
 /**
  * @title Escrow
  * @author Megabyte
@@ -11,8 +14,13 @@ contract Escrow {
     event Escrow__RewardDistributed();
 
     uint256 public constant PRECISION = 1e18;
+    address public immutable questNFT;
 
     mapping(address protocols => uint256 amountStaked) public stakes;
+
+    constructor(address _questNFT) {
+        questNFT = _questNFT;
+    }
 
     ////////////////
     // external functions /////
@@ -21,9 +29,11 @@ contract Escrow {
     /**
      * @notice Stake ETH to the contract.
      */
-    function stake() external payable {
-        stakes[msg.sender] += msg.value;
+    function stake(string memory _tokenUri) external payable {
         emit Escrow__Staked(msg.sender, msg.value);
+        stakes[msg.sender] += msg.value;
+
+        QuestNFT(questNFT).mintQuestNFT(msg.sender, _tokenUri);
     }
 
     /**
