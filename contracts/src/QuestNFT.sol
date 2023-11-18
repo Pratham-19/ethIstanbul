@@ -24,16 +24,12 @@ contract QuestNFT is ERC721, ERC721URIStorage {
     address immutable i_implementationAddress;
     uint256 immutable i_chainId;
 
-    string private s_uri;
     mapping(uint256 => address) private tokenToTBA;
 
-    constructor(address _registryAddress, address _implementationAddress, uint256 _chainId, string memory _uri)
-        ERC721("QuestNFT", "QST")
-    {
+    constructor(address _registryAddress, address _implementationAddress, uint256 _chainId) ERC721("QuestNFT", "QST") {
         i_registryAddress = _registryAddress;
         i_implementationAddress = _implementationAddress;
         i_chainId = _chainId;
-        s_uri = _uri;
     }
 
     ////////////////
@@ -43,14 +39,15 @@ contract QuestNFT is ERC721, ERC721URIStorage {
     /**
      * This function is called by the Protocol Users to create a quest, mint quest NFT and create a TBA for the NFT.
      * @param _user Protocol Address
+     * @param _uri URI of the NFT
      * @return tokenId  The tokenId of the minted NFT
      * @return tbaAddress The TBA address of the minted NFT
      */
-    function mintQuestNFT(address _user) external returns (uint256 tokenId, address tbaAddress) {
+    function mintQuestNFT(address _user, string memory _uri) external returns (uint256 tokenId, address tbaAddress) {
         _tokenIds.increment();
         tokenId = _tokenIds.current();
         _safeMint(_user, tokenId);
-        _setTokenURI(tokenId, s_uri);
+        _setTokenURI(tokenId, _uri);
         tbaAddress = createTBA(keccak256(abi.encodePacked(_user, tokenId)), tokenId);
         tokenToTBA[tokenId] = tbaAddress;
 
@@ -60,12 +57,13 @@ contract QuestNFT is ERC721, ERC721URIStorage {
     /**
      * This function is called by the dApp users after they complete the quest to mint a quest completion NFT.
      * @param _user User Address
+     * @param _uri URI of the NFT
      */
-    function mintQuestCompletionNFT(address _user) external {
+    function mintQuestCompletionNFT(address _user, string memory _uri) external {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _safeMint(_user, newItemId);
-        _setTokenURI(newItemId, s_uri);
+        _setTokenURI(newItemId, _uri);
 
         emit QuestNFT__MintedQuestCompletionNFT(_user, newItemId);
     }
@@ -82,10 +80,6 @@ contract QuestNFT is ERC721, ERC721URIStorage {
     ////////////////
     // getters /////
     ////////////////
-    function getURI() public view returns (string memory) {
-        return s_uri;
-    }
-
     function getTBA(uint256 tokenId) public view returns (address) {
         return tokenToTBA[tokenId];
     }
