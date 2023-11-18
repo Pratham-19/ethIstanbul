@@ -153,3 +153,26 @@ contract SetSponsorWallet is Script {
         setSponsorWalletUsingConfigs();
     }
 }
+
+contract MintTaskCompletionNFT is Script {
+    function mintTaskCompletionNFT(NFTDrop nftDrop, uint256 deployer_key) public {
+        vm.startBroadcast(deployer_key);
+
+        nftDrop.mintTaskCompletionNFT(msg.sender);
+        vm.stopBroadcast();
+        console.log("TaskCompletionNFT minted at: %s", address(nftDrop));
+    }
+
+    function mintTaskCompletionNFTUsingConfigs() public {
+        HelperConfig helperConfigs = new HelperConfig();
+        uint256 deployer_key = helperConfigs.deployer_key();
+        address mostRecentlyDeployedNFTDrop = DevOpsTools.get_most_recent_deployment("NFTDrop", block.chainid);
+        NFTDrop nftDrop = NFTDrop(mostRecentlyDeployedNFTDrop);
+
+        mintTaskCompletionNFT(nftDrop, deployer_key);
+    }
+
+    function run() public {
+        mintTaskCompletionNFTUsingConfigs();
+    }
+}

@@ -7,6 +7,7 @@ contract HelperConfig is Script {
     struct NetworkConfig {
         address _airnodeRrp;
         address _airnodeAddress;
+        bytes32 _endpointIdUint256;
         address _registryAddress;
         address _implementationAddress;
     }
@@ -27,6 +28,7 @@ contract HelperConfig is Script {
         0x566771D19FD088eE190e37C38d530a71453A5A31,
         0xbd394F796af6dBF94896D7F0e43524b53F32199d
     ];
+    address public sponsorWallet = 0xD4e41080f6BBd38Af66B65f1Fe9851332C7Dc812;
 
     constructor() {
         if (block.chainid == 80001) {
@@ -39,6 +41,7 @@ contract HelperConfig is Script {
         mumbaiConfigs = NetworkConfig({
             _airnodeRrp: 0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd,
             _airnodeAddress: 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D,
+            _endpointIdUint256: 0x94555f83f1addda23fdaa7c74f27ce2b764ed5cc430c66f5ff1bcf39d583da36,
             _registryAddress: 0x000000006551c19487814612e58FE06813775758,
             _implementationAddress: 0x41C8f39463A868d3A88af00cd0fe7102F30E44eC
         });
