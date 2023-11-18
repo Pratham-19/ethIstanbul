@@ -12,7 +12,7 @@ contract DeployQuestNFT is Script {
 
     function run() external returns (address) {
         helperConfig = new HelperConfig();
-        (,, address _registryAddress, address _implementationAddress) = helperConfig.activeNetworkConfig();
+        (,,, address _registryAddress, address _implementationAddress) = helperConfig.activeNetworkConfig();
         uint256 chainId = block.chainid;
         uint256 deployer_key = helperConfig.deployer_key();
 
