@@ -19,3 +19,6 @@
 [submodule "contracts/lib/airnode"]
 	path = contracts/lib/airnode
 	url = https://github.com/api3dao/airnode
+[submodule "contracts/lib/gelato"]
+	path = contracts/lib/gelato
+	url = https://github.com/gelatodigital/automate
