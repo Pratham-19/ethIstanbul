@@ -19,14 +19,16 @@ contract DeployNFTDrop is Script {
             ,
             ,
             address _automate,
-            address _taskCreator
+            address _taskCreator,
         ) = helperConfig.activeNetworkConfig();
         string memory _nftDropName = helperConfig.nftDropName();
         string memory _nftDropSymbol = helperConfig.nftDropSymbol();
         uint256 _interval = helperConfig.nftDropInterval();
+        string memory _baseURI = helperConfig.nftDropBaseURL();
 
         vm.startBroadcast();
-        nftDrop = new NFTDrop(_nftDropName, _nftDropSymbol, _interval, _airnodeRrp,
+        nftDrop = new NFTDrop(_nftDropName, _nftDropSymbol, 
+        _baseURI, _interval, _airnodeRrp,
         _airNodeAddress,
         _endPointIdUint256, _automate, _taskCreator);
         console.log("NFTDrop deployed at: %s", address(nftDrop));
