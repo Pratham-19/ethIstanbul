@@ -42,7 +42,7 @@ ifeq ($(findstring --network mumbai,$(ARGS)),--network mumbai)
 endif
 
 ifeq ($(findstring --network gnosis,$(ARGS)),--network gnosis)
-	NETWORK_ARGS := --rpc-url $(GNOSIS_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(GONSIS_SCAN_API_KEY) --legacy
+	NETWORK_ARGS := --rpc-url $(GNOSIS_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(GONSIS_SCAN_API_KEY) --legacy --priority-gas-price 1000000000000
 endif
 
 deployNFTDrop:
