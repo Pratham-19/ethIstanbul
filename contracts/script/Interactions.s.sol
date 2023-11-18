@@ -2,29 +2,58 @@
 pragma solidity 0.8.18;
 
 import {Script} from "forge-std/Script.sol";
+import {console} from "forge-std/console.sol";
 import {DevOpsTools} from "foundry-devops/src/DevOpsTools.sol";
 
 import {HelperConfig} from "./HelperConfig.s.sol";
 import {QuestNFT} from "../src/QuestNFT.sol";
 
 contract CreateQuestNFT is Script {
-    function delegateGovernanceToken(address _questNFTAddress, uint256 deployer_key) public {
+    function createQuest(address _questNFTAddress, uint256 deployer_key, string memory _uri) public {
         vm.startBroadcast(deployer_key);
 
         QuestNFT questNFT = QuestNFT(_questNFTAddress);
-        questNFT.mintQuestNFT(msg.sender);
-
+        (uint256 tokenId, address tbaAddress) = questNFT.mintQuestNFT(msg.sender, _uri);
         vm.stopBroadcast();
+        console.log("QuestNFT minted at: %s", address(questNFT));
+        console.log("tba address: %s", tbaAddress);
+        console.log("tokenId: %s", tokenId);
     }
 
     function createQuestUsingConfigs() public {
         address mostRecentlyDeployedQuestNFT = DevOpsTools.get_most_recent_deployment("QuestNFT", block.chainid);
         HelperConfig helperConfigs = new HelperConfig();
         uint256 deployer_key = helperConfigs.deployer_key();
-        delegateGovernanceToken(mostRecentlyDeployedQuestNFT, deployer_key);
+        string memory _questNFTURL = helperConfigs.questNFTURL();
+
+        createQuest(mostRecentlyDeployedQuestNFT, deployer_key, _questNFTURL);
     }
 
     function run() public {
         createQuestUsingConfigs();
+    }
+}
+
+contract MintQuestCompletionNFT is Script {
+    function mintQuestCompletionNFT(QuestNFT questNFT, uint256 deployer_key, string memory _uri) public {
+        vm.startBroadcast(deployer_key);
+
+        questNFT.mintQuestCompletionNFT(msg.sender, _uri);
+        vm.stopBroadcast();
+        console.log("QuestCompletionNFT minted at: %s", address(questNFT));
+    }
+
+    function MintQuestCompletionNFTUsingConfigs() public {
+        HelperConfig helperConfigs = new HelperConfig();
+        uint256 deployer_key = helperConfigs.deployer_key();
+        address mostRecentlyDeployedQuestNFT = DevOpsTools.get_most_recent_deployment("QuestNFT", block.chainid);
+        QuestNFT questNFT = QuestNFT(mostRecentlyDeployedQuestNFT);
+        string memory _questCompletionNFTURL = helperConfigs.questNFTURL();
+
+        mintQuestCompletionNFT(questNFT, deployer_key, _questCompletionNFTURL);
+    }
+
+    function run() public {
+        MintQuestCompletionNFTUsingConfigs();
     }
 }

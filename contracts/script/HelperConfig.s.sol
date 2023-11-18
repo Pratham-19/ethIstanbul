@@ -27,7 +27,7 @@ contract HelperConfig is Script {
         }
     }
 
-    function getMumbaiConfigs() public view returns (NetworkConfig memory mumbaiConfigs) {
+    function getMumbaiConfigs() public pure returns (NetworkConfig memory mumbaiConfigs) {
         mumbaiConfigs = NetworkConfig({
             _airnodeRrp: 0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd,
             _airnodeAddress: 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D,
