@@ -12,7 +12,7 @@ contract CreateQuestNFT is Script {
         vm.startBroadcast(deployer_key);
 
         QuestNFT questNFT = QuestNFT(_questNFTAddress);
-        questNFT.mint(msg.sender);
+        questNFT.mintQuestNFT(msg.sender);
 
         vm.stopBroadcast();
     }
