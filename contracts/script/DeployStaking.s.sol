@@ -4,20 +4,20 @@ pragma solidity 0.8.18;
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
-import {Staking} from "../src/Staking.sol";
+import {Escrow} from "../src/Escrow.sol";
 
 contract DeployNFTDrop is Script {
     HelperConfig public helperConfig;
-    Staking public staking;
+    Escrow public escrow;
 
     function run() external returns (address) {
         helperConfig = new HelperConfig();
 
         vm.startBroadcast();
-        staking = new Staking();
-        console.log("Staking deployed at: %s", address(staking));
+        escrow = new Escrow();
+        console.log("Escrow deployed at: %s", address(escrow));
         vm.stopBroadcast();
 
-        return address(staking);
+        return address(escrow);
     }
 }

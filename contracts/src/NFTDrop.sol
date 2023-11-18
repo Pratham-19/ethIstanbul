@@ -4,27 +4,35 @@ pragma solidity 0.8.18;
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
 import {RrpRequesterV0} from "@api3/contracts/rrp/requesters/RrpRequesterV0.sol";
 import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
 
 contract NFTDrop is ERC721, AutomationCompatibleInterface, RrpRequesterV0 {
-    event NFTDrop__RequestedUint256Array(bytes32 indexed requestId, uint256 size);
-    event NFTDrop__ReceivedUint256Array(bytes32 indexed requestId, uint256[] response);
+    event NFTDrop__RequestedUint256(bytes32 indexed requestId);
+    event NFTDrop__ReceivedUint256(bytes32 indexed requestId, uint256 response);
     event NFTDrop__SetBaseURI(string baseURI);
     event NFTDrop__RequestQuantumon(address indexed user, bytes32 indexed requestId);
     event NFTDrop__GenerateQuantumon(address indexed user, uint256 indexed tokenId);
+    event NFTDrop__SetSponsorWallet(address indexed sponsorWallet);
 
     using Counters for Counters.Counter;
     using Strings for uint256;
 
     uint256 public immutable i_interval;
     address public immutable i_airnodeAddress;
-    address public immutable i_sponsorWallet;
 
+    address public s_sponsorWallet;
     bytes32 public s_endpointIdUint256;
     uint256 public s_lastTimeStamp;
     uint256 public s_qrngUint256;
     uint256[9958] public s_ids; //Array to store the Quantomon Id - This is different from the tokenId
+    address[] public s_users = [
+        0xa60f738a60BCA515Ac529b7335EC7CB2eE3891d2,
+        0xdDCc06f98A7C71Ab602b8247d540dA5BD8f5D2A2,
+        0x566771D19FD088eE190e37C38d530a71453A5A31,
+        0xbd394F796af6dBF94896D7F0e43524b53F32199d
+    ];
 
     // Mapping that maps the requestId for a random number to the fullfillment status of that request
     mapping(bytes32 => bool) public s_expectingRequestWithIdToBeFulfilled;
@@ -40,13 +48,16 @@ contract NFTDrop is ERC721, AutomationCompatibleInterface, RrpRequesterV0 {
         string memory symbol,
         uint256 _interval,
         address _airnodeRrp,
-        address _airnodeAddress,
-        address _sponsorWallet
+        address _airnodeAddress
     ) ERC721(name, symbol) RrpRequesterV0(_airnodeRrp) {
         i_interval = _interval;
         i_airnodeAddress = _airnodeAddress;
-        i_sponsorWallet = _sponsorWallet;
         s_lastTimeStamp = block.timestamp;
+    }
+
+    function setSponsorWallet(address _sponsorWallet) external {
+        s_sponsorWallet = _sponsorWallet;
+        emit NFTDrop__SetSponsorWallet(_sponsorWallet);
     }
 
     function setBaseURI(string memory baseURI) external {
@@ -82,22 +93,38 @@ contract NFTDrop is ERC721, AutomationCompatibleInterface, RrpRequesterV0 {
         s_ids[len - 1] = 0;
     }
 
-    function requestQuantumon() public payable returns (bytes32) {
-        require(msg.value >= 5 ether, "Need to send atleast 5 ether to the sponsorWallet");
+    function fuckingDropItRandomly() internal {
+        uint256 addressLength = s_users.length;
+        uint256 i;
+        for (i = 0; i < addressLength;) {
+            unchecked {
+                i++;
+            }
+            requestQuantumon(s_users[i]);
+        }
+    }
+
+    function mintTaskCompletionNFT(address _user) external {
+        requestQuantumon(_user);
+    }
+
+    /////////////////////////
+    /// API3 Functions ////
+    /////////////////////////
+
+    function requestQuantumon(address _user) public payable returns (bytes32) {
         bytes32 requestId = airnodeRrp.makeFullRequest(
             i_airnodeAddress,
             s_endpointIdUint256,
             address(this),
-            i_sponsorWallet,
+            s_sponsorWallet,
             address(this),
             this.generateQuantumon.selector,
             ""
         );
         s_expectingRequestWithIdToBeFulfilled[requestId] = true;
-        requestToSender[requestId] = msg.sender;
-        (bool success,) = i_sponsorWallet.call{value: 0.01 ether}("");
-        require(success, "Forward failed");
-        emit NFTDrop__RequestQuantumon(msg.sender, requestId);
+        requestToSender[requestId] = _user;
+        emit NFTDrop__RequestQuantumon(_user, requestId);
         return requestId;
     }
 
@@ -111,40 +138,6 @@ contract NFTDrop is ERC721, AutomationCompatibleInterface, RrpRequesterV0 {
         _setTokenURI(tokenId, id.toString());
         emit NFTDrop__GenerateQuantumon(requestToSender[requestId], tokenId);
     }
-
-    function fuckingDropItRandomly() internal {}
-
-    /////////////////////////
-    /// API3 Functions ////
-    /////////////////////////
-
-    // /// @notice Requests a `uint256[]`
-    // /// @param size Size of the requested array
-    // function makeRequestUint256Array(uint256 size) external {
-    //     bytes32 requestId = airnodeRrp.makeFullRequest(
-    //         i_airnodeAddress,
-    //         s_endpointIdUint256Array,
-    //         address(this),
-    //         i_sponsorWallet,
-    //         address(this),
-    //         this.fulfillUint256Array.selector,
-    //         // Using Airnode ABI to encode the parameters
-    //         abi.encode(bytes32("1u"), bytes32("size"), size)
-    //     );
-    //     s_expectingRequestWithIdToBeFulfilled[requestId] = true;
-    //     emit NFTDrop__RequestedUint256Array(requestId, size);
-    // }
-
-    // /// @notice Called by the Airnode through the AirnodeRrp contract to
-    // /// fulfill the request
-    // function fulfillUint256Array(bytes32 requestId, bytes calldata data) external onlyAirnodeRrp {
-    //     require(s_expectingRequestWithIdToBeFulfilled[requestId], "Request ID not known");
-    //     s_expectingRequestWithIdToBeFulfilled[requestId] = false;
-    //     uint256[] memory qrngUint256Array = abi.decode(data, (uint256[]));
-    //     // Do what you want with `qrngUint256Array` here...
-    //     s_qrngUint256Array = qrngUint256Array;
-    //     emit NFTDrop__ReceivedUint256Array(requestId, qrngUint256Array);
-    // }
 
     /////////////////////////
     /// Chainlink functions ////
@@ -162,13 +155,13 @@ contract NFTDrop is ERC721, AutomationCompatibleInterface, RrpRequesterV0 {
     function performUpkeep(bytes calldata /* performData */ ) external override {
         if ((block.timestamp - s_lastTimeStamp) > i_interval) {
             s_lastTimeStamp = block.timestamp;
-            // call the API3
+            fuckingDropItRandomly();
         }
         // We don't use the performData in this example. The performData is generated by the Automation Node's call to your checkUpkeep function
     }
 
     function withdraw() external {
-        airnodeRrp.requestWithdrawal(i_airnodeAddress, i_sponsorWallet);
+        airnodeRrp.requestWithdrawal(i_airnodeAddress, s_sponsorWallet);
     }
 
     ///////////////////////////
