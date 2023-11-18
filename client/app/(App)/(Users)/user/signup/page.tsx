@@ -43,7 +43,7 @@ const Signup = () => {
                 variant: "outline",
                 size: "lg",
                 className:
-                  "flex justify-center items-center space-x-2 hover:scale-[0.95] transition-transform duration-300 px-12 rounded-3xl shadow-lg ",
+                  "flex justify-center items-center space-x-2 hover:scale-[0.95] transition-transform duration-300 px-20 py-6 rounded-3xl shadow-lg",
               })}
               key={item.name}
             >
