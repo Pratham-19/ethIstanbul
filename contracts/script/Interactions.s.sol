@@ -8,6 +8,7 @@ import {DevOpsTools} from "foundry-devops/src/DevOpsTools.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
 import {QuestNFT} from "../src/QuestNFT.sol";
 import {Escrow} from "../src/Escrow.sol";
+import {NFTDrop} from "../src/NFTDrop.sol";
 
 contract CreateQuestNFT is Script {
     function createQuest(address _questNFTAddress, uint256 deployer_key, string memory _uri) public {
@@ -106,5 +107,27 @@ contract DistributeRewards is Script {
 
     function run() public {
         distributeRewardsUsingConfigs();
+    }
+}
+
+contract SetBaseURI is Script {
+    function setBaseURI(NFTDrop nftDrop, uint256 deployer_key, string memory baseURL) public {
+        vm.startBroadcast(deployer_key);
+        nftDrop.setBaseURI(baseURL);
+        vm.stopBroadcast();
+    }
+
+    function setBaseURIUsingConfigs() public {
+        HelperConfig helperConfigs = new HelperConfig();
+        uint256 deployer_key = helperConfigs.deployer_key();
+        address mostRecentlyDeployedNFTDrop = DevOpsTools.get_most_recent_deployment("NFTDrop", block.chainid);
+        NFTDrop nftDrop = NFTDrop(mostRecentlyDeployedNFTDrop);
+        string memory baseURL = helperConfigs.nftDropBaseURL();
+
+        setBaseURI(nftDrop, deployer_key, baseURL);
+    }
+
+    function run() public {
+        setBaseURIUsingConfigs();
     }
 }

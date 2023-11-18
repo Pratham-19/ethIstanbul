@@ -19,6 +19,8 @@ contract HelperConfig is Script {
     uint256 public nftDropInterval = 1 minutes;
     string public questNFTURL =
         "https://bafybeif6h4vucihtot4c3niqajx73jdpuwq2d2j2xegr5d6y33ipub46si.ipfs.nftstorage.link/";
+    string public nftDropBaseURL =
+        "https://bafybeiae7j2yx3ikp6fwgkqfxxq2cnccppovybd7guuk27eaeqhrlsf2la.ipfs.nftstorage.link/test";
     address[] public addressesToReward = [
         0xa60f738a60BCA515Ac529b7335EC7CB2eE3891d2,
         0xdDCc06f98A7C71Ab602b8247d540dA5BD8f5D2A2,
