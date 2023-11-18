@@ -19,7 +19,7 @@ export default function Home() {
           Partner
         </Link>
         <Link
-          href="/user"
+          href="/user/dashboard"
           className={buttonVariants({
             size: "lg",
             className: "px-10",
