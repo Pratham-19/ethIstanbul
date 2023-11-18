@@ -34,7 +34,7 @@ const PieceCard = () => {
             height={40}
             className="w-6 h-6"
           />
-          <h2>Got To Chat</h2>
+          <h2>Go To Chat</h2>
         </button>
       </section>
     </div>

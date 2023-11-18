@@ -1,19 +1,27 @@
 import Image from "next/image";
 import React from "react";
-import { buttonVariants } from "../ui/button";
 
 const CharacterCard = () => {
   return (
     <div className="w-[45vw] border my-2 border-black flex rounded-xl overflow-hidden ">
-      <section className="relative w-[48%] flex justify-center items-center">
+      <section className="relative w-[48%] flex flex-col items-center overflow-hidden border p-2">
         <Image
           src="/quest-hen.png"
           alt="hen-quest"
           width={1024}
           height={1024}
-          className="rounded-xl px-2 py-1 my-auto"
+          className="rounded-xl my-auto"
         />
-        <div></div>
+        <button className="flex justify-center items-center space-x-3 text-sm bg-black text-[#EFB359] uppercase rounded-b-xl h-fit w-full py-1 px-2 ">
+          <Image
+            src="/chat-dashboard.svg"
+            alt="chat-pic"
+            width={40}
+            height={40}
+            className="w-6 h-6"
+          />
+          <h2>Go To Chat</h2>
+        </button>
       </section>
       <section className="w-[52%] flex flex-col justify-around items-center py-3 px-2">
         <div className="h-[70%] flex flex-col justify-around items-center">
