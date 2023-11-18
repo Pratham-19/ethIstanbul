@@ -1,6 +1,5 @@
 import { cn } from "../../_lib/utils";
 import Image from "next/image";
-import { buttonVariants } from "../ui/button";
 
 const Navbar = ({ className }: { className?: string }) => {
   return (

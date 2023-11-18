@@ -1,5 +1,3 @@
-import MaxWidthWrapper from "@/app/_components/MaxWidthWrapper";
-
 export default function PageLayout({
   children,
 }: {
