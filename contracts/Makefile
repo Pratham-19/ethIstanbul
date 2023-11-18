@@ -37,6 +37,10 @@ anvil :; anvil -m 'test test test test test test test test test test test junk' 
 
 NETWORK_ARGS := --rpc-url http://localhost:8545 --private-key $(DEFAULT_ANVIL_KEY) --broadcast
 
+ifeq ($(findstring --network goerli,$(ARGS)),--network goerli)
+	NETWORK_ARGS := --rpc-url $(GOERLI_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) --legacy
+endif
+
 ifeq ($(findstring --network mumbai,$(ARGS)),--network mumbai)
 	NETWORK_ARGS := --rpc-url $(MUMBAI_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(POLYGON_SCAN_API_KEY) --legacy
 endif
@@ -44,6 +48,35 @@ endif
 ifeq ($(findstring --network gnosis,$(ARGS)),--network gnosis)
 	NETWORK_ARGS := --rpc-url $(GNOSIS_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(GONSIS_SCAN_API_KEY) --legacy --priority-gas-price 1000000000000
 endif
+
+ifeq ($(findstring --network sepolia,$(ARGS)),--network sepolia)
+	NETWORK_ARGS := --rpc-url $(SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) 
+endif
+
+ifeq ($(findstring --network polygonZkEVM,$(ARGS)),--network polygonZkEVM)
+	NETWORK_ARGS := --rpc-url $(POLYGON_ZKEVM_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(POLYGON_ZKEVM_SCAN_API_KEY) 
+endif
+
+ifeq ($(findstring --network arbGoerli,$(ARGS)),--network arbGoerli)
+	NETWORK_ARGS := --rpc-url $(ARB_GOERLI_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ARB_GOERLI_SCAN_API_KEY) 
+endif
+
+ifeq ($(findstring --network base,$(ARGS)),--network arbGoerli)
+	NETWORK_ARGS := --rpc-url $(BASE_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(BASE_SCAN_API_KEY) 
+endif
+
+ifeq ($(findstring --network linea,$(ARGS)),--network arbGoerli)
+	NETWORK_ARGS := --rpc-url $(LINEA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(LINEA_SCAN_API_KEY) 
+endif
+
+ifeq ($(findstring --network scrollSepolia,$(ARGS)),--network scrollSepolia)
+	NETWORK_ARGS := --rpc-url $(SCROLL_SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(SEPOLIA_SCAN_API_KEY) --legacy --priority-gas-price 1000000000000
+endif
+
+ifeq ($(findstring --network celoTestnet,$(ARGS)),--network celoTestnet)
+	NETWORK_ARGS := --rpc-url $(CELO_TESTNET_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(CELO_SCAN_API_KEY) 
+endif
+
 
 deployNFTDrop:
 	@forge script script/DeployNFTDrop.s.sol:DeployNFTDrop $(NETWORK_ARGS)
@@ -77,3 +110,6 @@ mintTaskCompletetionNFT:
 
 deployMarketplace:
 	@forge script script/DeployMarketplace.s.sol:DeployMarketPlace $(NETWORK_ARGS)
+
+setup:
+	make deployQuestNFT ARGS="--network scrollSepolia" && make deployEscrow ARGS="--network scrollSepolia" && make deployNFTDrop ARGS="--network scrollSepolia" && make deployMarketplace ARGS="--network scrollSepolia"

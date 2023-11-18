@@ -9,8 +9,6 @@ import {RrpRequesterV0} from "@api3/contracts/rrp/requesters/RrpRequesterV0.sol"
 import {AutomateReady} from "@gelato/contracts/integrations/AutomateReady.sol";
 
 contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
-    event NFTDrop__RequestedUint256(bytes32 indexed requestId);
-    event NFTDrop__ReceivedUint256(bytes32 indexed requestId, uint256 indexed response);
     event NFTDrop__SetBaseURI(string baseURI);
     event NFTDrop__RequestQuantumon(address indexed user, bytes32 indexed requestId);
     event NFTDrop__GenerateQuantumon(address indexed user, uint256 indexed tokenId);
@@ -20,7 +18,7 @@ contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
     using Strings for uint256;
 
     uint256 constant MIN_RANGE = 0;
-    uint256 constant MAX_RANGE = 10;
+    uint256 constant MAX_RANGE = 9;
     bytes32 public immutable i_endPointIdUint256;
     address public immutable i_airNodeAddress;
 
@@ -44,6 +42,7 @@ contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
     constructor(
         string memory name,
         string memory symbol,
+        string memory baseURI,
         uint256 _interval,
         address _airnodeRrp,
         address _airNodeAddress,
@@ -55,6 +54,7 @@ contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
         i_airNodeAddress = _airNodeAddress;
         i_endPointIdUint256 = _endPointIdUint256;
         s_lastTimeStamp = block.timestamp;
+        _baseURIextended = baseURI;
     }
 
     function setSponsorWallet(address _sponsorWallet) external {
