@@ -1,48 +1,47 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.18;
 
-import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 /**
  * @title MarketPlace
  * @author Megabyte
  * @notice This contract is used to list and buy NFTs.
  */
-contract MarketPlace is IERC721Receiver {
-    address public immutable i_NFTDropAddress;
-
-    uint256 public constant MAX_PRICE = 5 ether;
-
-    constructor(address _nftDropAddress) {
-        i_NFTDropAddress = _nftDropAddress;
-    }
-    ////////////////////////////////////////////////////////////////
-    ///////////////////////// external /////////////////////////////
-    ////////////////////////////////////////////////////////////////
-
-    /**
-     * This function will list the component NFTs for sale.
-     * @param _tokenId The tokenId of the NFT to be listed
-     */
-    function listItem(uint256 _tokenId) external {
-        IERC721(i_NFTDropAddress).safeTransferFrom(msg.sender, address(this), _tokenId);
+contract MarketPlace {
+    struct Listing {
+        address seller;
+        uint256 price;
     }
 
-    /**
-     * This function will buy the component NFTs.
-     * @param _tokenId The tokenId of the NFT to be sold
-     */
-    function buyItem(uint256 _tokenId) external payable {
-        require(msg.value == MAX_PRICE, "MarketPlace: incorrect price");
-        IERC721(i_NFTDropAddress).safeTransferFrom(address(this), msg.sender, _tokenId);
+    mapping(uint256 => Listing) public listings; // Maps tokenId to Listing
+    IERC721 public immutable nftContract;
+
+    event ItemListed(address indexed seller, uint256 indexed tokenId, uint256 price);
+    event ItemSold(address indexed buyer, uint256 indexed tokenId, uint256 price);
+
+    constructor(address _nftContract) {
+        nftContract = IERC721(_nftContract);
     }
 
-    ////////////////////////////////////////////////////////////////
-    ///////////////////////// functions required ///////////////////
-    ////////////////////////////////////////////////////////////////
-    function onERC721Received(address operator, address from, uint256 tokenId, bytes calldata data)
-        external
-        returns (bytes4)
-    {}
+    function listItem(uint256 tokenId, uint256 price) external {
+        require(nftContract.ownerOf(tokenId) == msg.sender, "Not the owner");
+        require(price > 0, "Price must be greater than zero");
+
+        nftContract.transferFrom(msg.sender, address(this), tokenId);
+        listings[tokenId] = Listing(msg.sender, price);
+
+        emit ItemListed(msg.sender, tokenId, price);
+    }
+
+    function buyItem(uint256 tokenId) external payable {
+        Listing memory listing = listings[tokenId];
+        require(msg.value >= listing.price, "Insufficient funds");
+
+        delete listings[tokenId];
+        payable(listing.seller).transfer(msg.value);
+        nftContract.transferFrom(address(this), msg.sender, tokenId);
+
+        emit ItemSold(msg.sender, tokenId, listing.price);
+    }
 }

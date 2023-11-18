@@ -64,3 +64,12 @@ stake:
 
 distributeRewards:
 	@forge script script/Interactions.s.sol:DistributeRewards $(NETWORK_ARGS)
+
+setSponsorWallet:
+	@forge script script/Interactions.s.sol:SetSponsorWallet $(NETWORK_ARGS)
+
+mintTaskCompletetionNFT:
+	@forge script script/Interactions.s.sol:MintTaskCompletionNFT $(NETWORK_ARGS)
+
+deployMarketplace:
+	@forge script script/DeployMarketplace.s.sol:DeployMarketPlace $(NETWORK_ARGS)
