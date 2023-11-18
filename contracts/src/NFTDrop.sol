@@ -80,17 +80,7 @@ contract NFTDrop is ERC721, AutomationCompatibleInterface, RrpRequesterV0 {
             return string(abi.encodePacked(base, _tokenURI));
         }
         // If there is a baseURI but no tokenURI, concatenate the tokenID to the baseURI.
-        return string(abi.encodePacked(base, tokenId.toString()));
-    }
-
-    function _pickRandomUniqueId(uint256 random) private returns (uint256 id) {
-        uint256 len = s_ids.length - _tokenIds.current();
-        _tokenIds.increment();
-        require(len > 0, "no s_ids left");
-        uint256 randomIndex = random % len;
-        id = s_ids[randomIndex] != 0 ? s_ids[randomIndex] : randomIndex;
-        s_ids[randomIndex] = uint256(s_ids[len - 1] == 0 ? len - 1 : s_ids[len - 1]);
-        s_ids[len - 1] = 0;
+        return string(abi.encodePacked(base, tokenId.toString(), ".json"));
     }
 
     function fuckingDropItRandomly() internal {
@@ -162,6 +152,20 @@ contract NFTDrop is ERC721, AutomationCompatibleInterface, RrpRequesterV0 {
 
     function withdraw() external {
         airnodeRrp.requestWithdrawal(i_airnodeAddress, s_sponsorWallet);
+    }
+
+    ///////////////////////////
+    // internal functions /////
+    ///////////////////////////
+
+    function _pickRandomUniqueId(uint256 random) internal returns (uint256 id) {
+        uint256 len = s_ids.length - _tokenIds.current();
+        _tokenIds.increment();
+        require(len > 0, "no s_ids left");
+        uint256 randomIndex = random % len;
+        id = s_ids[randomIndex] != 0 ? s_ids[randomIndex] : randomIndex;
+        s_ids[randomIndex] = uint256(s_ids[len - 1] == 0 ? len - 1 : s_ids[len - 1]);
+        s_ids[len - 1] = 0;
     }
 
     ///////////////////////////

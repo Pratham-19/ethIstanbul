@@ -44,6 +44,9 @@ endif
 deployNFTDrop:
 	@forge script script/DeployNFTDrop.s.sol:DeployNFTDrop $(NETWORK_ARGS)
 
+setBaseURI:
+	@forge script script/Interactions.s.sol:SetBaseURI $(NETWORK_ARGS)
+
 deployQuestNFT:
 	@forge script script/DeployQuestNFT.s.sol:DeployQuestNFT $(NETWORK_ARGS)
 
