@@ -8,7 +8,7 @@ export default function Home() {
       <h1 className="text-3xl">Hola Amigos </h1>
       <div className="flex my-5 space-x-5 ">
         <Link
-          href="/partner/dashboard"
+          href="/promter/dashboard"
           className={buttonVariants({
             size: "lg",
             className: "px-7",
@@ -16,7 +16,7 @@ export default function Home() {
           })}
           target="_blank"
         >
-          Partner
+          Promter
         </Link>
         <Link
           href="/user/dashboard"

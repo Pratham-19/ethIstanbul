@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const PartnerDashBoard = () => {
+const PromoterDashBoard = () => {
   const pathname = usePathname();
   const [showDashboard, setShowDashboard] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -18,13 +18,13 @@ const PartnerDashBoard = () => {
     {
       name: "Dashboard",
       icon: "/dashboard.svg",
-      link: "/partner/dashboard",
+      link: "/promter/dashboard",
       isActive: showDashboard,
     },
     {
       name: "Create",
       icon: "/create.svg",
-      link: "/partner/create",
+      link: "/promter/create",
       isActive: showCreate,
     },
   ];
@@ -136,4 +136,4 @@ const PartnerDashBoard = () => {
     </div>
   );
 };
-export default PartnerDashBoard;
+export default PromoterDashBoard;

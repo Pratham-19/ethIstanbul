@@ -1,7 +1,7 @@
 import Footer from "@/app/_components/Footer";
 import React from "react";
 import { PartnerDashboardQuest, QuestStatus } from "@/app/_lib/types";
-import PartnerQuestCard from "@/app/_components/Card/PartnerQuestCard";
+import PromoterQuestCard from "@/app/_components/Card/PromoterQuestCard";
 
 export default function Dashboard() {
   const quests: PartnerDashboardQuest[] = [
@@ -45,7 +45,7 @@ export default function Dashboard() {
       </h1>
       <div className="my-5 flex flex-wrap gap-3">
         {quests.map((quest) => (
-          <PartnerQuestCard {...quest} key={quest.img} />
+          <PromoterQuestCard {...quest} key={quest.img} />
         ))}
       </div>
 
