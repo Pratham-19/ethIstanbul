@@ -18,13 +18,13 @@ const PromoterDashBoard = () => {
     {
       name: "Dashboard",
       icon: "/dashboard.svg",
-      link: "/promter/dashboard",
+      link: "/promoter/dashboard",
       isActive: showDashboard,
     },
     {
       name: "Create",
       icon: "/create.svg",
-      link: "/promter/create",
+      link: "/promoter/create",
       isActive: showCreate,
     },
   ];
