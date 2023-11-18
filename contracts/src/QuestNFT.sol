@@ -8,6 +8,7 @@ import {ERC6551Registry} from "@erc6551/contracts/ERC6551Registry.sol";
 
 contract QuestNFT is ERC721, ERC721URIStorage {
     event QuestNFT__Minted(address indexed user, uint256 indexed tokenId, address indexed tba);
+    event QuestNFT__MintedQuestCompletionNFT(address indexed user, uint256 indexed tokenId);
 
     using Counters for Counters.Counter;
 
@@ -40,6 +41,15 @@ contract QuestNFT is ERC721, ERC721URIStorage {
         emit QuestNFT__Minted(user, newItemId, tba);
 
         return (newItemId, tba);
+    }
+
+    function mintQuestCompletionNFT(address _user) external {
+        _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+        _safeMint(_user, newItemId);
+        _setTokenURI(newItemId, s_uri);
+
+        emit QuestNFT__MintedQuestCompletionNFT(_user, newItemId);
     }
 
     function createTBA(bytes32 salt, uint256 tokenId) internal returns (address) {
