@@ -3,11 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useEnsName } from "wagmi";
+import { useAccount } from "wagmi";
 
 const PromoterDashBoard = () => {
   const pathname = usePathname();
   const [showDashboard, setShowDashboard] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const { address } = useAccount();
+  const { data, isError, isLoading } = useEnsName({
+    address,
+  });
 
   const menu: {
     name: string;
@@ -77,7 +83,7 @@ const PromoterDashBoard = () => {
             height={40}
             className="w-7 h-7 rounded-full"
           />
-          <h2 className="text-xl">Chiliz.lens</h2>
+          <h2 className="text-xl">{data ? data : "Pratham.eth"}</h2>
         </section>
         <section>
           {menu.map((item) => (

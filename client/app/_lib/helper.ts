@@ -1,7 +1,5 @@
 import { NFTStorage, File, Blob } from "nft.storage";
 import toast from "react-hot-toast";
-import { v4 as uuidv4 } from "uuid";
-import { FileValues } from "./types";
 
 const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
 
@@ -9,23 +7,21 @@ const client = new NFTStorage({
   token: NFT_STORAGE_TOKEN ?? "",
 });
 
-export const storeFiles = async (data: any) => {
+export const storeFiles = async ({ componentsData, mainPicData }: any) => {
   let arr = [];
-  console.log(data);
   toast.loading("Uploading to IPFS...", { id: "uploading" });
-  for (const key in data) {
-    if (data.hasOwnProperty(key)) {
+  for (const key in componentsData) {
+    if (componentsData.hasOwnProperty(key) && componentsData[key]) {
       const newFile = new File(
-        [data[key]],
-        uuidv4() + "." + data[key].type.split("/")[1],
+        [componentsData[key]],
+        +"." + componentsData[key].type.split("/")[1],
         {
-          type: data[key].type,
+          type: componentsData[key].type,
         }
       );
       arr.push(newFile);
     }
   }
-  console.log(arr);
   if (arr.length === 0) {
     toast.dismiss("uploading");
     toast.error("No files selected!");
@@ -35,4 +31,20 @@ export const storeFiles = async (data: any) => {
   console.log(cid);
   toast.dismiss("uploading");
   toast.success("Uploaded to IPFS!");
+};
+
+export const storeFile = async (
+  file: BlobPart,
+  title: string,
+  description: string
+) => {
+  const imageFile = new File([file], "nft.png", {
+    type: "image/png",
+  });
+  const metadata = await client.store({
+    name: title,
+    description: description,
+    image: imageFile,
+  });
+  return "https://" + metadata.ipnft + ".ipfs.dweb.link/metadata.json";
 };

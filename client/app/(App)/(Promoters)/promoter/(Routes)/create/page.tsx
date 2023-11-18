@@ -3,8 +3,16 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import Footer from "@/app/_components/Footer";
-import { storeFiles } from "@/app/_lib/helper";
-import { FileValues } from "@/app/_lib/types";
+import { storeFile, storeFiles } from "@/app/_lib/helper";
+import { Components } from "@/app/_lib/types";
+import {
+  prepareWriteContract,
+  readContract,
+  waitForTransaction,
+  writeContract,
+} from "wagmi/actions";
+import EscrowAccount from "@/app/_abis/abi/Escrow.json";
+import { parseEther } from "viem";
 
 const Create = () => {
   const [questName, setQuestName] = useState("");
@@ -28,17 +36,22 @@ const Create = () => {
   const char7Ref = useRef<HTMLInputElement>(null);
   const char8Ref = useRef<HTMLInputElement>(null);
 
-  const [componentValues, setComponentValues] = useState<FileValues>({
-    questPic: null,
-    char1: null,
-    char2: null,
-    char3: null,
-    char4: null,
-    char5: null,
-    char6: null,
-    char7: null,
-    char8: null,
+  const [componentValues, setComponentValues] = useState<Components>({
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null,
+    "6": null,
+    "7": null,
+    "8": null,
   });
+
+  const [mainPicValue, setMainPicValue] = useState<File | null>(null);
+
+  const [isStaked, setIsStaked] = useState<boolean>(false);
+
+  const [stakePrice, setStakePrice] = useState<string>("0");
 
   const components: {
     name: string;
@@ -47,49 +60,49 @@ const Create = () => {
     ref: React.MutableRefObject<HTMLInputElement | null>;
   }[] = [
     {
-      name: "char1",
+      name: "1",
       value: char1,
       setValue: setChar1,
       ref: char1Ref,
     },
     {
-      name: "char2",
+      name: "2",
       value: char2,
       setValue: setChar2,
       ref: char2Ref,
     },
     {
-      name: "char3",
+      name: "3",
       value: char3,
       setValue: setChar3,
       ref: char3Ref,
     },
     {
-      name: "char4",
+      name: "4",
       value: char4,
       setValue: setChar4,
       ref: char4Ref,
     },
     {
-      name: "char5",
+      name: "5",
       value: char5,
       setValue: setChar5,
       ref: char5Ref,
     },
     {
-      name: "char6",
+      name: "6",
       value: char6,
       setValue: setChar6,
       ref: char6Ref,
     },
     {
-      name: "char7",
+      name: "7",
       value: char7,
       setValue: setChar7,
       ref: char7Ref,
     },
     {
-      name: "char8",
+      name: "8",
       value: char8,
       setValue: setChar8,
       ref: char8Ref,
@@ -108,10 +121,7 @@ const Create = () => {
 
       return false;
     }
-    setComponentValues({
-      ...componentValues,
-      questPic: file,
-    });
+    setMainPicValue(file);
 
     if (size / 1024 / 1024 > 2) {
       toast.error("File size exceeded the limit of 2MB");
@@ -129,7 +139,7 @@ const Create = () => {
   return (
     <div className="w-full h-full my-5 overflow-scroll">
       <h1 className="text-4xl font-semibold text-center uppercase">
-        Create Quest
+        Create Puzzle
       </h1>
       <div>
         <input
@@ -164,7 +174,7 @@ const Create = () => {
                   className="w-12 h-12"
                 />
                 <h2 className="text-md font-semibold text-center">
-                  Upload your final quest Image
+                  Upload your final puzzle Image
                 </h2>
               </button>
             )}
@@ -187,7 +197,13 @@ const Create = () => {
               </>
             )}
           </div>
-          <div className="w-[65%] flex flex-wrap gap-4 ">
+          <div className="w-[65%] flex flex-wrap gap-4 relative">
+            {/* {!isStaked && (
+              <div className="z-20 opacity-30 rounded-xl absolute top-0 right-0 bg-[hsl(var(--destructive))] text-center w-full h-full text-white text-3xl  justify-center items-center">
+                <h2>Stake to add components !</h2>
+              </div>
+            )} */}
+
             {components.map((component, index) => (
               <div
                 className=" border-2 border-dashed rounded-xl flex flex-col justify-center items-center w-28 h-24 relative"
@@ -214,6 +230,7 @@ const Create = () => {
                       toast.error("File size exceeded the limit of 2MB");
                       return false;
                     }
+                    console.log([component.name], file);
                     setComponentValues({
                       ...componentValues,
                       [component.name]: file,
@@ -301,6 +318,9 @@ const Create = () => {
             </section>
             <input
               type="number"
+              onChange={(e) => {
+                setStakePrice(e.target.value);
+              }}
               className="bg-white border border-[#200F00] text-[#EFB359] py-3 px-1 w-[30%] rounded-r-xl outline-none"
               placeholder="$ 0.00"
             />
@@ -308,9 +328,44 @@ const Create = () => {
 
           <button
             className="bg-[#200F00] text-[#EFB359] flex justify-center items-center space-x-2  py-3 px-1 rounded-xl"
-            onClick={() => {
-              console.log(componentValues);
-              storeFiles(componentValues);
+            onClick={async () => {
+              if (!questName) {
+                toast.error("Quest name is required");
+                return;
+              }
+              if (!mainPicValue) {
+                toast.error("Main picture is required");
+                return;
+              }
+              if (stakePrice == "0") {
+                toast.error("Stake price is required to be > 0");
+                return;
+              }
+
+              toast.loading("Uploading files", {
+                id: "uploading",
+              });
+              const tokenUri = await storeFile(
+                mainPicValue,
+                questName,
+                "this is a sample quest"
+              );
+
+              const { request } = await prepareWriteContract({
+                address: EscrowAccount.address as `0x${string}`,
+                abi: EscrowAccount.abi,
+                functionName: "stake",
+                args: [tokenUri],
+                value: parseEther(stakePrice),
+              });
+              const { hash } = await writeContract(request);
+              await waitForTransaction({ hash })
+                .then(() => console.log("transaction confirmed"))
+                .catch((error) => {
+                  console.log("error", error);
+                });
+              toast.dismiss("uploading");
+              toast.success("Files uploaded successfully");
             }}
           >
             <Image
@@ -320,7 +375,7 @@ const Create = () => {
               height={40}
               className="w-6 h-6"
             />
-            <h2>Submit Quest</h2>
+            {isStaked ? <h2> Submit Stake</h2> : <h2> Submit Components</h2>}
           </button>
         </section>
       </div>

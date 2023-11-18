@@ -1,7 +1,19 @@
+"use client";
+import { useAccount } from "wagmi";
 import { cn } from "../../_lib/utils";
 import Image from "next/image";
+import { useEffect } from "react";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 const Navbar = ({ className }: { className?: string }) => {
+  const { address, isDisconnected } = useAccount();
+  const { open } = useWeb3Modal();
+
+  useEffect(() => {
+    if (!address || isDisconnected) {
+      open();
+    }
+  }, [address, isDisconnected]);
   return (
     <nav
       className={cn(
@@ -35,16 +47,35 @@ const Navbar = ({ className }: { className?: string }) => {
           />
           <h2 className="text-md font-medium">23</h2>
         </div>
-        <div className="flex items-center justify-center">
-          <Image
-            src="/nav-eth.svg"
-            alt="user"
-            width={40}
-            height={40}
-            className="h-6 w-6"
-          />
-          <h2>0xCD...213</h2>
-        </div>
+        {!address && (
+          <button
+            onClick={() => {
+              open();
+            }}
+          >
+            <h2>Connect Wallet</h2>
+          </button>
+        )}
+        {address && (
+          <button
+            className="flex items-center justify-center"
+            onClick={() => {
+              open({ view: "Networks" });
+            }}
+          >
+            <Image
+              src="/nav-eth.svg"
+              alt="user"
+              width={40}
+              height={40}
+              className="h-6 w-6"
+            />
+            <h2>
+              {address?.substring(0, 3)}...
+              {address?.substring(address.length - 3)}
+            </h2>
+          </button>
+        )}
       </button>
     </nav>
   );

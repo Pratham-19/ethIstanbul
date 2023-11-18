@@ -1,0 +1,51 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Component{
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  component_id String @unique
+  title String
+image String
+metadata String
+quest_id String
+}
+
+model Quest{
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  token_bound_address String @unique
+  quest_id String 
+  title String
+description String
+pool String
+image String
+componentId  String[]
+Metadata String
+
+}
+model Promoters{
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  wallet_address String @unique
+  quests String[]
+  name String
+}
+model Users{
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  wallet_address String @unique
+  quests String[]
+  components String[]
+  name String
+}
+
+model MarketPlace{
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+ price String
+ Metadata String
+
+}

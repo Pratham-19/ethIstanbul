@@ -16,11 +16,10 @@ import {
   scrollSepolia,
   xdcTestnet,
 } from "viem/chains";
+import { useEffect, useState } from "react";
 
-// 1. Get projectId
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "";
 
-// 2. Create wagmiConfig
 const metadata = {
   name: "Monalizard",
   description: "play and promote",
@@ -47,5 +46,11 @@ const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 createWeb3Modal({ wagmiConfig, projectId, chains });
 
 export function Web3Modal({ children }: { children: React.ReactNode }) {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  if (!ready) return null;
   return <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>;
 }
