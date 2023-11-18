@@ -64,7 +64,7 @@ contract Stake is Script {
     function stake(Escrow _escrow, uint256 deployer_key, uint256 stakingAmount) public {
         vm.startBroadcast(deployer_key);
 
-        _escrow.stake{value: stakingAmount}();
+        _escrow.stake{value: stakingAmount}("");
         vm.stopBroadcast();
         console.log("Staked at: %s", address(_escrow));
     }
@@ -121,7 +121,7 @@ contract SetBaseURI is Script {
         HelperConfig helperConfigs = new HelperConfig();
         uint256 deployer_key = helperConfigs.deployer_key();
         address mostRecentlyDeployedNFTDrop = DevOpsTools.get_most_recent_deployment("NFTDrop", block.chainid);
-        NFTDrop nftDrop = NFTDrop(mostRecentlyDeployedNFTDrop);
+        NFTDrop nftDrop = NFTDrop(payable(mostRecentlyDeployedNFTDrop));
         string memory baseURL = helperConfigs.nftDropBaseURL();
 
         setBaseURI(nftDrop, deployer_key, baseURL);
@@ -143,7 +143,7 @@ contract SetSponsorWallet is Script {
         HelperConfig helperConfigs = new HelperConfig();
         uint256 deployer_key = helperConfigs.deployer_key();
         address mostRecentlyDeployedNFTDrop = DevOpsTools.get_most_recent_deployment("NFTDrop", block.chainid);
-        NFTDrop nftDrop = NFTDrop(mostRecentlyDeployedNFTDrop);
+        NFTDrop nftDrop = NFTDrop(payable(mostRecentlyDeployedNFTDrop));
         address sponsorWallet = helperConfigs.sponsorWallet();
 
         setSponsorWallet(nftDrop, deployer_key, sponsorWallet);
@@ -167,7 +167,7 @@ contract MintTaskCompletionNFT is Script {
         HelperConfig helperConfigs = new HelperConfig();
         uint256 deployer_key = helperConfigs.deployer_key();
         address mostRecentlyDeployedNFTDrop = DevOpsTools.get_most_recent_deployment("NFTDrop", block.chainid);
-        NFTDrop nftDrop = NFTDrop(mostRecentlyDeployedNFTDrop);
+        NFTDrop nftDrop = NFTDrop(payable(mostRecentlyDeployedNFTDrop));
 
         mintTaskCompletionNFT(nftDrop, deployer_key);
     }
