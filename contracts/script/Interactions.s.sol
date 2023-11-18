@@ -131,3 +131,25 @@ contract SetBaseURI is Script {
         setBaseURIUsingConfigs();
     }
 }
+
+contract SetSponsorWallet is Script {
+    function setSponsorWallet(NFTDrop nftDrop, uint256 deployer_key, address sponsorWallet) public {
+        vm.startBroadcast(deployer_key);
+        nftDrop.setSponsorWallet(sponsorWallet);
+        vm.stopBroadcast();
+    }
+
+    function setSponsorWalletUsingConfigs() public {
+        HelperConfig helperConfigs = new HelperConfig();
+        uint256 deployer_key = helperConfigs.deployer_key();
+        address mostRecentlyDeployedNFTDrop = DevOpsTools.get_most_recent_deployment("NFTDrop", block.chainid);
+        NFTDrop nftDrop = NFTDrop(mostRecentlyDeployedNFTDrop);
+        address sponsorWallet = helperConfigs.sponsorWallet();
+
+        setSponsorWallet(nftDrop, deployer_key, sponsorWallet);
+    }
+
+    function run() public {
+        setSponsorWalletUsingConfigs();
+    }
+}
