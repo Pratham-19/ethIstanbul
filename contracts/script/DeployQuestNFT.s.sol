@@ -6,7 +6,7 @@ import {console} from "forge-std/console.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
 import {QuestNFT} from "../src/QuestNFT.sol";
 
-contract DeployNFTDrop is Script {
+contract DeployQuestNFT is Script {
     HelperConfig public helperConfig;
     QuestNFT public questNFT;
 
@@ -14,10 +14,10 @@ contract DeployNFTDrop is Script {
         helperConfig = new HelperConfig();
         (,, address _registryAddress, address _implementationAddress) = helperConfig.activeNetworkConfig();
         uint256 chainId = block.chainid;
-        string memory _questNFTURL = helperConfig.questNFTURL();
+        uint256 deployer_key = helperConfig.deployer_key();
 
-        vm.startBroadcast();
-        questNFT = new QuestNFT(_registryAddress, _implementationAddress, chainId,_questNFTURL );
+        vm.startBroadcast(deployer_key);
+        questNFT = new QuestNFT(_registryAddress, _implementationAddress, chainId );
         console.log("QuestNFT deployed at: %s", address(questNFT));
         vm.stopBroadcast();
 
