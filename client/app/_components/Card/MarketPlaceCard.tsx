@@ -4,7 +4,7 @@ import { buttonVariants } from "../ui/button";
 
 const MarketplaceCard = () => {
   return (
-    <div className="bg-white border-[1.5px] my-2 border-black flex flex-col rounded-2xl overflow-hidden w-52 ">
+    <div className="bg-white border-[1.5px] my-2 border-black flex flex-col rounded-2xl overflow-hidden w-52 hover:scale-[1.02] transition-transform duration-300 ml-2 ">
       <section className="h-[62%]">
         <Image
           src="/chicken-glasses.jpg"
