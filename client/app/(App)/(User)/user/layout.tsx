@@ -14,7 +14,6 @@ export default function UserLayout({
       <div className="basis-[80%] relative pb-20">
         <Navbar className="" />
         {children}
-        {/* <Footer className="absolute bottom-0" /> */}
       </div>
     </div>
   );
