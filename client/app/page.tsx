@@ -161,21 +161,21 @@ export default function Home() {
         alt="l1"
         width={800}
         height={800}
-        className="absolute -top-10 -right-5 -z-10 opacity-30"
+        className="absolute -top-10 -right-5 -z-10 opacity-10"
       />
       <Image
         src="/a3.png"
         alt="l1"
         width={800}
         height={800}
-        className="absolute bottom-10 -right-[300px] -z-10 opacity-30"
+        className="absolute bottom-10 -right-[300px] -z-10 opacity-10"
       />
       <Image
         src="/a2.png"
         alt="l1"
         width={800}
         height={800}
-        className="absolute top-[500px] -left-72 -z-10 opacity-30"
+        className="absolute top-[500px] -left-72 -z-10 opacity-10"
       />
     </MaxWidthWrapper>
   );
