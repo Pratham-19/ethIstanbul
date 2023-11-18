@@ -7,6 +7,7 @@ import {DevOpsTools} from "foundry-devops/src/DevOpsTools.sol";
 
 import {HelperConfig} from "./HelperConfig.s.sol";
 import {QuestNFT} from "../src/QuestNFT.sol";
+import {Escrow} from "../src/Escrow.sol";
 
 contract CreateQuestNFT is Script {
     function createQuest(address _questNFTAddress, uint256 deployer_key, string memory _uri) public {
@@ -55,5 +56,29 @@ contract MintQuestCompletionNFT is Script {
 
     function run() public {
         MintQuestCompletionNFTUsingConfigs();
+    }
+}
+
+contract Stake is Script {
+    function stake(Escrow _escrow, uint256 deployer_key, uint256 stakingAmount) public {
+        vm.startBroadcast(deployer_key);
+
+        _escrow.stake{value: stakingAmount}();
+        vm.stopBroadcast();
+        console.log("Staked at: %s", address(_escrow));
+    }
+
+    function stakeUsingConfigs() public {
+        HelperConfig helperConfigs = new HelperConfig();
+        uint256 deployer_key = helperConfigs.deployer_key();
+        address mostRecentlyDeployedEscrow = DevOpsTools.get_most_recent_deployment("Escrow", block.chainid);
+        uint256 stakingAmount = 1 ether;
+        Escrow escrow = Escrow(payable(mostRecentlyDeployedEscrow));
+
+        stake(escrow, deployer_key, stakingAmount);
+    }
+
+    function run() public {
+        stakeUsingConfigs();
     }
 }
