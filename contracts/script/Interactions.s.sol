@@ -82,3 +82,29 @@ contract Stake is Script {
         stakeUsingConfigs();
     }
 }
+
+contract DistributeRewards is Script {
+    function distributeRewards(Escrow _escrow, uint256 deployer_key, address[] memory addressesToReward) public {
+        vm.startBroadcast(deployer_key);
+        _escrow.distributeRewards(addressesToReward);
+        vm.stopBroadcast();
+        console.log("Rewards distributed at: %s", address(_escrow));
+    }
+
+    function distributeRewardsUsingConfigs() public {
+        HelperConfig helperConfigs = new HelperConfig();
+        uint256 deployer_key = helperConfigs.deployer_key();
+        address mostRecentlyDeployedEscrow = DevOpsTools.get_most_recent_deployment("Escrow", block.chainid);
+        Escrow escrow = Escrow(payable(mostRecentlyDeployedEscrow));
+        address[] memory addressesToReward = new address[](3);
+        addressesToReward[0] = helperConfigs.addressesToReward(0);
+        addressesToReward[1] = helperConfigs.addressesToReward(1);
+        addressesToReward[2] = helperConfigs.addressesToReward(2);
+
+        distributeRewards(escrow, deployer_key, addressesToReward);
+    }
+
+    function run() public {
+        distributeRewardsUsingConfigs();
+    }
+}
