@@ -1,4 +1,3 @@
-import CharacterCard from "@/app/_components/Card/CharacterCard";
 import Footer from "@/app/_components/Footer";
 import React from "react";
 import { PartnerDashboardQuest, QuestStatus } from "@/app/_lib/types";

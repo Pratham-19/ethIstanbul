@@ -110,7 +110,17 @@ const PartnerDashBoard = () => {
             />
             <h2>ChatRooms</h2>
           </span>
-          <div className="flex flex-col mx-auto my-1 mt-3">
+          <button className=" bg-black py-2 px-2 rounded-xl text-[#EFB359] flex justify-center items-center space-x-2 hover:scale-[0.95] transition-transform duration-300 my-2">
+            <Image
+              src="/addComment.svg"
+              alt="user"
+              width={40}
+              height={40}
+              className="w-6 h-6"
+            />
+            <h2>Add ChatRoom</h2>
+          </button>
+          <div className="flex flex-col mx-auto my-2 ">
             <h2 className="my-2 cursor-pointer hover:scale-[1.03] transition-transform duration-300">
               # elpolloloco
             </h2>
