@@ -102,7 +102,7 @@ export default function Home() {
           </section>
 
           <Link
-            href="/promoter/signup"
+            href="/user/signup"
             className="w-[30%] relative rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.03] transition-transform duration-300"
           >
             <Image

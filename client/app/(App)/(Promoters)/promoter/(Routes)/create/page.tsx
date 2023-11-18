@@ -3,6 +3,8 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import Footer from "@/app/_components/Footer";
+import { storeFiles } from "@/app/_lib/helper";
+import { FileValues } from "@/app/_lib/types";
 
 const Create = () => {
   const [questName, setQuestName] = useState("");
@@ -25,6 +27,18 @@ const Create = () => {
   const char6Ref = useRef<HTMLInputElement>(null);
   const char7Ref = useRef<HTMLInputElement>(null);
   const char8Ref = useRef<HTMLInputElement>(null);
+
+  const [componentValues, setComponentValues] = useState<FileValues>({
+    questPic: null,
+    char1: null,
+    char2: null,
+    char3: null,
+    char4: null,
+    char5: null,
+    char6: null,
+    char7: null,
+    char8: null,
+  });
 
   const components: {
     name: string;
@@ -94,6 +108,10 @@ const Create = () => {
 
       return false;
     }
+    setComponentValues({
+      ...componentValues,
+      questPic: file,
+    });
 
     if (size / 1024 / 1024 > 2) {
       toast.error("File size exceeded the limit of 2MB");
@@ -196,6 +214,10 @@ const Create = () => {
                       toast.error("File size exceeded the limit of 2MB");
                       return false;
                     }
+                    setComponentValues({
+                      ...componentValues,
+                      [component.name]: file,
+                    });
                     const reader = new FileReader();
                     if (file) {
                       reader.readAsDataURL(file);
@@ -283,8 +305,14 @@ const Create = () => {
               placeholder="$ 0.00"
             />
           </div>
-          <div></div>
-          <button className="bg-[#200F00] text-[#EFB359] flex justify-center items-center space-x-4  p-3 rounded-xl">
+
+          <button
+            className="bg-[#200F00] text-[#EFB359] flex justify-center items-center space-x-2  py-3 px-1 rounded-xl"
+            onClick={() => {
+              console.log(componentValues);
+              storeFiles(componentValues);
+            }}
+          >
             <Image
               src="/submit.svg"
               alt="hero"

@@ -1,8 +1,12 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { buttonVariants } from "@/app/_components/ui/button";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 const Signup = () => {
+  const { open, close } = useWeb3Modal();
+
   const signIn: {
     name: string;
     icon: string;
@@ -20,6 +24,24 @@ const Signup = () => {
       icon: "/walletcoin.svg",
     },
   ];
+
+  // const connect = (name: string) => async () => {
+  //   window.alert(name);
+  //   switch (name) {
+  //     // case "Lens":
+  //     //   open();
+  //     //   break;
+  //     // case "Worldcoin":
+  //     //   open();
+  //     //   break;
+  //     // case "WalletConnect":
+  //     //   window.alert("WalletConnect");
+  //     //   await open();
+  //     //   break;
+  //     // default:
+  //     //   break;
+  //   }
+  // };
   return (
     <div className="w-screen h-screen flex">
       <div className="w-[57vw] flex flex-col justify-center items-center">
@@ -29,7 +51,7 @@ const Signup = () => {
             alt="Navbar-logo"
             width={40}
             height={40}
-            className="h-16 w-16"
+            className="h-24 w-24"
           />
           <h2 className="font-extrabold my-auto uppercase text-3xl">
             monalizard
@@ -39,13 +61,11 @@ const Signup = () => {
         <section className="flex flex-col space-y-4 mt-7">
           {signIn.map((item) => (
             <button
-              className={buttonVariants({
-                variant: "outline",
-                size: "lg",
-                className:
-                  "flex justify-center items-center space-x-2 hover:scale-[0.95] transition-transform duration-300 px-20 py-6 rounded-3xl shadow-lg",
-              })}
+              className="flex justify-center items-center space-x-2 hover:scale-[0.95] transition-transform duration-300 px-20 py-6 rounded-3xl shadow-lg border border-black"
               key={item.name}
+              onClick={() => {
+                open();
+              }}
             >
               <Image
                 src={item.icon}
