@@ -19,6 +19,12 @@ contract HelperConfig is Script {
     uint256 public nftDropInterval = 1 minutes;
     string public questNFTURL =
         "https://bafybeif6h4vucihtot4c3niqajx73jdpuwq2d2j2xegr5d6y33ipub46si.ipfs.nftstorage.link/";
+    address[] public addressesToReward = [
+        0xa60f738a60BCA515Ac529b7335EC7CB2eE3891d2,
+        0xdDCc06f98A7C71Ab602b8247d540dA5BD8f5D2A2,
+        0x566771D19FD088eE190e37C38d530a71453A5A31,
+        0xbd394F796af6dBF94896D7F0e43524b53F32199d
+    ];
 
     constructor() {
         if (block.chainid == 80001) {
