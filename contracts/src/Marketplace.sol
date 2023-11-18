@@ -41,11 +41,9 @@ contract MarketPlace {
     function buyItem(uint256 tokenId) external payable {
         Listing memory listing = listings[tokenId];
 
-        require(tokenContract.balanceOf(msg.sender) >= listing.price, "Insufficient funds");
-
         delete listings[tokenId];
 
-        tokenContract.transferFrom(msg.sender, listing.seller, listing.price);
+        tokenContract.transferFrom(msg.sender, listing.seller, 2 ether);
         nftContract.transferFrom(address(this), msg.sender, tokenId);
 
         emit ItemSold(msg.sender, tokenId, listing.price);
