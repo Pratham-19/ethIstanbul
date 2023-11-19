@@ -92,7 +92,22 @@ export default function Dashboard({ params }: { params: { id: string } }) {
           ))}
         </section>
       </div>
-
+      <div>
+        <h2 className="text-xl font-semibold text-center uppercase px-5">
+          Chat
+          <section className="bg-white rounded-xl h-[25vh] my-5 flex flex-col justify-end ">
+            <section className="w-[90%] border-2 flex justify-end px-3 mx-auto h-10 rounded-xl my-auto items-center">
+              <Image
+                src="/send.svg"
+                className="w-5 h-5"
+                width="40"
+                height="40"
+                alt="send"
+              />
+            </section>
+          </section>
+        </h2>
+      </div>
       <Footer />
     </div>
   );

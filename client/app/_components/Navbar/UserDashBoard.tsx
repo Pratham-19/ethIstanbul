@@ -3,12 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useAccount, useEnsName } from "wagmi";
 
 const UserDashBoard = () => {
   const pathname = usePathname();
   const [showDashboard, setShowDashboard] = useState(true);
   const [showQuest, setShowQuest] = useState(false);
   const [showMarketplace, setShowMarketplace] = useState(false);
+  const { address } = useAccount();
+  const { data, isError, isLoading } = useEnsName({
+    address,
+  });
 
   const menu: {
     name: string;
@@ -92,7 +97,7 @@ const UserDashBoard = () => {
             height={40}
             className="w-7 h-7 rounded-full"
           />
-          <h2 className="text-xl">WRD2.lens</h2>
+          <h2 className="text-xl">{data ? data : "Saam.lens"}</h2>
         </section>
         <section>
           {menu.map((item) => (
@@ -125,7 +130,10 @@ const UserDashBoard = () => {
             />
             <h2>ChatRooms</h2>
           </span>
-          <div className="flex flex-col mx-auto my-1 mt-3">
+          <Link
+            href="/user/chat"
+            className="flex flex-col mx-auto my-1 mt-3"
+          >
             <h2 className="my-2 cursor-pointer hover:scale-[1.03] transition-transform duration-300">
               # elpolloloco
             </h2>
@@ -135,7 +143,7 @@ const UserDashBoard = () => {
             <h2 className="my-1 cursor-pointer hover:scale-[1.03] transition-transform duration-300">
               # elpolloloco
             </h2>
-          </div>
+          </Link>
         </section>
       </div>
     </div>

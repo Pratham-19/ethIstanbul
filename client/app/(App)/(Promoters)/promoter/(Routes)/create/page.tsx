@@ -367,29 +367,29 @@ const Create = () => {
 
               toast.dismiss("staking");
               toast.success("Staked successfully");
-              toast.loading("Minting NFT", {
-                id: "minting",
-              });
+              // toast.loading("Minting NFT", {
+              //   id: "minting",
+              // });
 
-              const { request: mintERC } = await prepareWriteContract({
-                address: QuestNFT.address as `0x${string}`,
-                abi: QuestNFT.abi,
-                functionName: "mintQuestNFT",
-                args: [address, tokenUri],
-              });
-              const { hash: hashERC } = await writeContract(mintERC);
-              await waitForTransaction({ hash: hashERC })
-                .then(() => console.log("transaction confirmed"))
-                .catch((error) => {
-                  toast.dismiss("minting");
-                  console.log("error", error);
-                });
+              // const { request: mintERC } = await prepareWriteContract({
+              //   address: QuestNFT.address as `0x${string}`,
+              //   abi: QuestNFT.abi,
+              //   functionName: "mintQuestNFT",
+              //   args: [address, tokenUri],
+              // });
+              // const { hash: hashERC } = await writeContract(mintERC);
+              // await waitForTransaction({ hash: hashERC })
+              //   .then(() => console.log("transaction confirmed"))
+              //   .catch((error) => {
+              //     toast.dismiss("minting");
+              //     console.log("error", error);
+              //   });
 
-              toast.success("Minted successfully");
+              // toast.success("Minted successfully");
 
-              toast.loading("Uploading components", {
-                id: "uploading",
-              });
+              // toast.loading("Uploading components", {
+              //   id: "uploading",
+              // });
               const { request: uploadERC } = await prepareWriteContract({
                 address: NFTDrop.address as `0x${string}`,
                 abi: NFTDrop.abi,

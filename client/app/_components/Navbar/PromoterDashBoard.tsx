@@ -126,7 +126,7 @@ const PromoterDashBoard = () => {
             />
             <h2>Add ChatRoom</h2>
           </button>
-          <div className="flex flex-col mx-auto my-2 ">
+          <Link href="/promoter/chat" className="flex flex-col mx-auto my-2 ">
             <h2 className="my-2 cursor-pointer hover:scale-[1.03] transition-transform duration-300">
               # elpolloloco
             </h2>
@@ -136,7 +136,7 @@ const PromoterDashBoard = () => {
             <h2 className="my-1 cursor-pointer hover:scale-[1.03] transition-transform duration-300">
               # elpolloloco
             </h2>
-          </div>
+          </Link>
         </section>
       </div>
     </div>
