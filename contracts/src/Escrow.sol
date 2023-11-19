@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.18;
 
-import {NFTDrop} from "./NFTDrop.sol";
-import {QuestNFT} from "./QuestNFT.sol";
-
 /**
  * @title Escrow
  * @author Megabyte
