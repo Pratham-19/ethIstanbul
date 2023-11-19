@@ -16,3 +16,12 @@
 [submodule "contracts/lib/erc6551"]
 	path = contracts/lib/erc6551
 	url = https://github.com/erc6551/reference
+[submodule "contracts/lib/airnode"]
+	path = contracts/lib/airnode
+	url = https://github.com/api3dao/airnode
+[submodule "contracts/lib/gelato"]
+	path = contracts/lib/gelato
+	url = https://github.com/gelatodigital/automate
+[submodule "contracts/lib/chronicle-std"]
+	path = contracts/lib/chronicle-std
+	url = https://github.com/chronicleprotocol/chronicle-std
