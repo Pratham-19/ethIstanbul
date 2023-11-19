@@ -13,7 +13,7 @@ const PartnerQuestCard = ({
 }: PartnerDashboardQuest) => {
   return (
     <Link
-      href="/promoter/dahboard/1"
+      href="/promoter/dashboard/1"
       className="w-[35vw] border my-2 border-black flex rounded-xl overflow-hidden "
     >
       <section className="relative w-[48%] flex flex-col items-center overflow-hidden border p-2">
