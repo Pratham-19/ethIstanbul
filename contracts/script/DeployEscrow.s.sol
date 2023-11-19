@@ -12,10 +12,8 @@ contract DeployEscrow is Script {
     Escrow public escrow;
 
     function run() external returns (address) {
-        address mostRecentlyDeployedQuestNFT = DevOpsTools.get_most_recent_deployment("QuestNFT", block.chainid);
-
         vm.startBroadcast();
-        escrow = new Escrow(mostRecentlyDeployedQuestNFT);
+        escrow = new Escrow();
         console.log("Escrow deployed at: %s", address(escrow));
         vm.stopBroadcast();
 

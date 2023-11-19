@@ -14,13 +14,8 @@ contract Escrow {
     event Escrow__RewardDistributed();
 
     uint256 public constant PRECISION = 1e18;
-    address public immutable questNFT;
 
     mapping(address protocols => uint256 amountStaked) public stakes;
-
-    constructor(address _questNFT) {
-        questNFT = _questNFT;
-    }
 
     ////////////////
     // external functions /////
@@ -29,11 +24,9 @@ contract Escrow {
     /**
      * @notice Stake ETH to the contract.
      */
-    function stake(string memory _tokenUri) external payable {
+    function stake() external payable {
         emit Escrow__Staked(msg.sender, msg.value);
         stakes[msg.sender] += msg.value;
-
-        QuestNFT(questNFT).mintQuestNFT(msg.sender, _tokenUri);
     }
 
     /**

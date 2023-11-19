@@ -64,7 +64,7 @@ contract Stake is Script {
     function stake(Escrow _escrow, uint256 deployer_key, uint256 stakingAmount) public {
         vm.startBroadcast(deployer_key);
 
-        _escrow.stake{value: stakingAmount}("");
+        _escrow.stake{value: stakingAmount}();
         vm.stopBroadcast();
         console.log("Staked at: %s", address(_escrow));
     }
