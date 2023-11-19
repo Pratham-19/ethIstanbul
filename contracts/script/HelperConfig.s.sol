@@ -44,12 +44,12 @@ contract HelperConfig is Script {
             activeNetworkConfig = getGoerliConfigs();
         } else if (block.chainid == 421613) {
             activeNetworkConfig = getARBGoerliConfigs();
-        } else if (block.chainid == 8453) {
-            activeNetworkConfig = getBaseConfigs();
+        } else if (block.chainid == 84531) {
+            activeNetworkConfig = getBaseGoerliConfigs();
         } else if (block.chainid == 59144) {
             activeNetworkConfig = getLineaConfigs();
-        } else if (block.chainid == 137) {
-            activeNetworkConfig = getPolygonZkEVMConfigs();
+        } else if (block.chainid == 1442) {
+            activeNetworkConfig = getPolygonZkEVMTestnetConfigs();
         } else if (block.chainid == 534351) {
             activeNetworkConfig = getScrollSepoliaConfigs();
         } else if (block.chainid == 50) {
@@ -130,7 +130,7 @@ contract HelperConfig is Script {
     }
 
     //! TODO: Mainnet
-    function getBaseConfigs() public pure returns (NetworkConfig memory baseGoerliConfigs) {
+    function getBaseGoerliConfigs() public pure returns (NetworkConfig memory baseGoerliConfigs) {
         baseGoerliConfigs = NetworkConfig({
             _airnodeRrp: 0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd, //dummy
             _airNodeAddress: 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D, //dummy
@@ -158,7 +158,7 @@ contract HelperConfig is Script {
     }
 
     //! TODO: Mainnet
-    function getPolygonZkEVMConfigs() public pure returns (NetworkConfig memory polygonZkEVMConfigs) {
+    function getPolygonZkEVMTestnetConfigs() public pure returns (NetworkConfig memory polygonZkEVMConfigs) {
         polygonZkEVMConfigs = NetworkConfig({
             _airnodeRrp: 0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd,
             _airNodeAddress: 0x224e030f03Cd3440D88BD78C9BF5Ed36458A1A25,
