@@ -1,5 +1,4 @@
 {
-  "address": "0x71d6ba857843038962bd44cf93039ed0807c5087",
   "abi": [
     {
       "inputs": [
@@ -462,5 +461,6 @@
       "stateMutability": "nonpayable",
       "type": "function"
     }
-  ]
+  ],
+  "QuestNFT":"0x38669dacc7C0D2924397e49D227A1bF748DD3E8C"
 }

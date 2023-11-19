@@ -50,7 +50,7 @@ ifeq ($(findstring --network gnosis,$(ARGS)),--network gnosis)
 endif
 
 ifeq ($(findstring --network sepolia,$(ARGS)),--network sepolia)
-	NETWORK_ARGS := --rpc-url $(SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) 
+	NETWORK_ARGS := --rpc-url $(SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast
 endif
 
 ifeq ($(findstring --network polygonZkEVMTestnet,$(ARGS)),--network polygonZkEVMTestnet)
@@ -65,8 +65,8 @@ ifeq ($(findstring --network arbGoerli,$(ARGS)),--network arbGoerli)
 	NETWORK_ARGS := --rpc-url $(ARB_GOERLI_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ARB_GOERLI_SCAN_API_KEY) 
 endif
 
-ifeq ($(findstring --network base,$(ARGS)),--network arbGoerli)
-	NETWORK_ARGS := --rpc-url $(BASE_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(BASE_SCAN_API_KEY) 
+ifeq ($(findstring --network baseGoerli,$(ARGS)),--network baseGoerli)
+	NETWORK_ARGS := --rpc-url $(BASE_GOERLI_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(BASE_SCAN_API_KEY) 
 endif
 
 ifeq ($(findstring --network linea,$(ARGS)),--network arbGoerli)
@@ -74,11 +74,15 @@ ifeq ($(findstring --network linea,$(ARGS)),--network arbGoerli)
 endif
 
 ifeq ($(findstring --network scrollSepolia,$(ARGS)),--network scrollSepolia)
-	NETWORK_ARGS := --rpc-url $(SCROLL_SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(SEPOLIA_SCAN_API_KEY) --legacy --priority-gas-price 1000000000000
+	NETWORK_ARGS := --rpc-url $(SCROLL_SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(SEPOLIA_SCAN_API_KEY) -vvvvv
 endif
 
 ifeq ($(findstring --network celoTestnet,$(ARGS)),--network celoTestnet)
 	NETWORK_ARGS := --rpc-url $(CELO_TESTNET_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(CELO_SCAN_API_KEY) 
+endif
+
+ifeq ($(findstring --network mantleTestnet,$(ARGS)),--network mantleTestnetm)
+	NETWORK_ARGS := --rpc-url $(MANTLE_TESTNET_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(MANTLE_SCAN_API_KEY) 
 endif
 
 
@@ -116,4 +120,4 @@ deployMarketplace:
 	@forge script script/DeployMarketplace.s.sol:DeployMarketPlace $(NETWORK_ARGS)
 
 setup:
-	make deployQuestNFT ARGS="--network scrollSepolia" && make deployEscrow ARGS="--network scrollSepolia" && make deployNFTDrop ARGS="--network scrollSepolia" && make deployMarketplace ARGS="--network scrollSepolia"
+	make deployQuestNFT ARGS="--network baseGoerli" && make deployEscrow ARGS="--network baseGoerli" && make deployNFTDrop ARGS="--network baseGoerli" && make deployMarketplace ARGS="--network baseGoerli"

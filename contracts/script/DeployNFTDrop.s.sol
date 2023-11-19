@@ -12,15 +12,8 @@ contract DeployNFTDrop is Script {
 
     function run() external returns (address) {
         helperConfig = new HelperConfig();
-        (
-            address _airnodeRrp,
-            address _airNodeAddress,
-            bytes32 _endPointIdUint256,
-            ,
-            ,
-            address _automate,
-            address _taskCreator,
-        ) = helperConfig.activeNetworkConfig();
+        (address _airnodeRrp, address _airNodeAddress, bytes32 _endPointIdUint256,,,,,) =
+            helperConfig.activeNetworkConfig();
         string memory _nftDropName = helperConfig.nftDropName();
         string memory _nftDropSymbol = helperConfig.nftDropSymbol();
         uint256 _interval = helperConfig.nftDropInterval();
@@ -28,10 +21,7 @@ contract DeployNFTDrop is Script {
 
         vm.startBroadcast();
         nftDrop = new NFTDrop(_nftDropName, _nftDropSymbol, 
-        _baseURI, _interval, _airnodeRrp,
-        _airNodeAddress,
-        _endPointIdUint256, _automate, _taskCreator);
-        console.log("NFTDrop deployed at: %s", address(nftDrop));
+        _baseURI, _interval, _airnodeRrp, _airNodeAddress,_endPointIdUint256);
         vm.stopBroadcast();
 
         return address(nftDrop);

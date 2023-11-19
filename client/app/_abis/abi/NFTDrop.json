@@ -1,5 +1,4 @@
 {
-  "address": "0x7c86e120fd47904a7bd80d8964214a6fcc54cbff",
   "abi": [
     {
       "inputs": [
@@ -11,6 +10,11 @@
         {
           "internalType": "string",
           "name": "symbol",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "baseURI",
           "type": "string"
         },
         {
@@ -32,16 +36,6 @@
           "internalType": "bytes32",
           "name": "_endPointIdUint256",
           "type": "bytes32"
-        },
-        {
-          "internalType": "address",
-          "name": "_automate",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_taskCreator",
-          "type": "address"
         }
       ],
       "stateMutability": "nonpayable",
@@ -121,25 +115,6 @@
       "inputs": [
         {
           "indexed": true,
-          "internalType": "bytes32",
-          "name": "requestId",
-          "type": "bytes32"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "response",
-          "type": "uint256"
-        }
-      ],
-      "name": "NFTDrop__ReceivedUint256",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
           "internalType": "address",
           "name": "user",
           "type": "address"
@@ -152,19 +127,6 @@
         }
       ],
       "name": "NFTDrop__RequestQuantumon",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "requestId",
-          "type": "bytes32"
-        }
-      ],
-      "name": "NFTDrop__RequestedUint256",
       "type": "event"
     },
     {
@@ -250,19 +212,6 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "automate",
-      "outputs": [
-        {
-          "internalType": "contract IAutomate",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "address",
@@ -276,19 +225,6 @@
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "dedicatedMsgSender",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -754,5 +690,6 @@
       "stateMutability": "payable",
       "type": "receive"
     }
-  ]
+  ],
+  "address":"0x574690E59ac6551A2A9Cd9CAad39d4fbe18B3118"
 }
