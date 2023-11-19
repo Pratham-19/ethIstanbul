@@ -1,5 +1,12 @@
 import Image from "next/image";
 import React from "react";
+import {
+  prepareWriteContract,
+  waitForTransaction,
+  writeContract,
+} from "wagmi/actions";
+import MarketPlace from "@/app/_abis/abi/MarketPlace.json";
+import toast from "react-hot-toast";
 
 const MarketplaceCard = ({ img }: { img: string }) => {
   return (
@@ -7,7 +14,6 @@ const MarketplaceCard = ({ img }: { img: string }) => {
       <section className="h-[62%]">
         <Image
           src={img}
-          // src="/chicken-glasses.jpg"
           alt="hen-quest"
           width={1024}
           height={1024}
@@ -35,7 +41,24 @@ const MarketplaceCard = ({ img }: { img: string }) => {
             className="w-6 h-6 ml-4"
           />
           <h2 className="font-semibold">$2 USDC</h2>
-          <button className="text-sm bg-black text-[#EFB359] uppercase rounded-2xl px-3 h-full py-1 self-end">
+          <button
+            className="text-sm bg-black text-[#EFB359] uppercase rounded-2xl px-3 h-full py-1 self-end"
+            onClick={async () => {
+              const { request } = await prepareWriteContract({
+                address: MarketPlace.address as `0x${string}`,
+                abi: MarketPlace.abi,
+                functionName: "buyItem",
+                args: [1],
+              });
+              const { hash: uploadyERC } = await writeContract(request);
+              await waitForTransaction({ hash: uploadyERC })
+                .then(() => console.log("transaction confirmed"))
+                .catch((error) => {
+                  toast.dismiss("uploading");
+                  console.log("error", error);
+                });
+            }}
+          >
             Buy
           </button>
         </section>
