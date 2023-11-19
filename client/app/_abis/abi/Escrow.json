@@ -1,17 +1,6 @@
 {
   "abi": [
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_questNFT",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
       "anonymous": false,
       "inputs": [],
       "name": "Escrow__RewardDistributed",
@@ -36,20 +25,11 @@
       "name": "Escrow__Staked",
       "type": "event"
     },
-    {
-      "stateMutability": "payable",
-      "type": "fallback"
-    },
+    { "stateMutability": "payable", "type": "fallback" },
     {
       "inputs": [],
       "name": "PRECISION",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
@@ -68,25 +48,6 @@
     },
     {
       "inputs": [],
-      "name": "questNFT",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_tokenUri",
-          "type": "string"
-        }
-      ],
       "name": "stake",
       "outputs": [],
       "stateMutability": "payable",
@@ -94,27 +55,16 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "protocols",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "protocols", "type": "address" }
       ],
       "name": "stakes",
       "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "amountStaked",
-          "type": "uint256"
-        }
+        { "internalType": "uint256", "name": "amountStaked", "type": "uint256" }
       ],
       "stateMutability": "view",
       "type": "function"
     },
-    {
-      "stateMutability": "payable",
-      "type": "receive"
-    }
+    { "stateMutability": "payable", "type": "receive" }
   ],
-  "address": "0x2e33a9e468535a666101e1770ede8153085fdc4c"
+  "address": "0x6a7C4247D21B8A7d8a1471Fdee84abaDf1E3491c"
 }

@@ -61,6 +61,9 @@ const Signup = () => {
             <h2>Lens</h2>
           </Link>
         </section>
+        <Link href="/user/dashboard" className="text-center underline my-5">
+          Skip for now
+        </Link>
       </div>
       <div className="w-[43vw] flex justify-end">
         <Image
