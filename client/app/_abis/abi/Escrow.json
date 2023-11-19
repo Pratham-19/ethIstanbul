@@ -25,11 +25,20 @@
       "name": "Escrow__Staked",
       "type": "event"
     },
-    { "stateMutability": "payable", "type": "fallback" },
+    {
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
     {
       "inputs": [],
       "name": "PRECISION",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
@@ -55,16 +64,27 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "protocols", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "protocols",
+          "type": "address"
+        }
       ],
       "name": "stakes",
       "outputs": [
-        { "internalType": "uint256", "name": "amountStaked", "type": "uint256" }
+        {
+          "internalType": "uint256",
+          "name": "amountStaked",
+          "type": "uint256"
+        }
       ],
       "stateMutability": "view",
       "type": "function"
     },
-    { "stateMutability": "payable", "type": "receive" }
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
   ],
-  "address": "0x6a7C4247D21B8A7d8a1471Fdee84abaDf1E3491c"
+  "address": "0x9977Fc583DB69d261Ba50fD124110695BBCfC18f"
 }
