@@ -6,9 +6,8 @@ import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 import {RrpRequesterV0} from "@api3/contracts/rrp/requesters/RrpRequesterV0.sol";
-import {AutomateReady} from "@gelato/contracts/integrations/AutomateReady.sol";
 
-contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
+contract NFTDrop is ERC721, RrpRequesterV0 {
     event NFTDrop__SetBaseURI(string baseURI);
     event NFTDrop__RequestQuantumon(address indexed user, bytes32 indexed requestId);
     event NFTDrop__GenerateQuantumon(address indexed user, uint256 indexed tokenId);
@@ -46,10 +45,8 @@ contract NFTDrop is ERC721, RrpRequesterV0, AutomateReady {
         uint256 _interval,
         address _airnodeRrp,
         address _airNodeAddress,
-        bytes32 _endPointIdUint256,
-        address _automate,
-        address _taskCreator
-    ) ERC721(name, symbol) RrpRequesterV0(_airnodeRrp) AutomateReady(_automate, _taskCreator) {
+        bytes32 _endPointIdUint256
+    ) ERC721(name, symbol) RrpRequesterV0(_airnodeRrp) {
         i_interval = _interval;
         i_airNodeAddress = _airNodeAddress;
         i_endPointIdUint256 = _endPointIdUint256;
