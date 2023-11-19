@@ -22,3 +22,6 @@
 [submodule "contracts/lib/gelato"]
 	path = contracts/lib/gelato
 	url = https://github.com/gelatodigital/automate
+[submodule "contracts/lib/chronicle-std"]
+	path = contracts/lib/chronicle-std
+	url = https://github.com/chronicleprotocol/chronicle-std
