@@ -7,21 +7,29 @@ const client = new NFTStorage({
   token: NFT_STORAGE_TOKEN ?? "",
 });
 
-export const storeFiles = async ({ componentsData, mainPicData }: any) => {
+export const storeFiles = async ({ componentsData }: any) => {
   let arr = [];
+  console.log(componentsData);
   toast.loading("Uploading to IPFS...", { id: "uploading" });
   for (const key in componentsData) {
     if (componentsData.hasOwnProperty(key) && componentsData[key]) {
+      console.log(key, componentsData[key]);
+      const imageFile = new File(componentsData[key], "nft.png", {
+        type: "image/png",
+      });
       const newFile = new File(
-        [componentsData[key]],
-        +"." + componentsData[key].type.split("/")[1],
+        [JSON.stringify({ image: imageFile, name: key })],
+        `${key}.json`,
         {
-          type: componentsData[key].type,
+          type: "application/json",
         }
       );
+
+      console.log(newFile);
       arr.push(newFile);
     }
   }
+  console.log(arr);
   if (arr.length === 0) {
     toast.dismiss("uploading");
     toast.error("No files selected!");

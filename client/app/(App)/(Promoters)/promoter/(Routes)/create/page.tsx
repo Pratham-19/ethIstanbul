@@ -12,6 +12,7 @@ import {
   writeContract,
 } from "wagmi/actions";
 import EscrowAccount from "@/app/_abis/abi/Escrow.json";
+import NFTDrop from "@/app/_abis/abi/NFTDrop.json";
 import { parseEther } from "viem";
 
 const Create = () => {
@@ -198,12 +199,6 @@ const Create = () => {
             )}
           </div>
           <div className="w-[65%] flex flex-wrap gap-4 relative">
-            {/* {!isStaked && (
-              <div className="z-20 opacity-30 rounded-xl absolute top-0 right-0 bg-[hsl(var(--destructive))] text-center w-full h-full text-white text-3xl  justify-center items-center">
-                <h2>Stake to add components !</h2>
-              </div>
-            )} */}
-
             {components.map((component, index) => (
               <div
                 className=" border-2 border-dashed rounded-xl flex flex-col justify-center items-center w-28 h-24 relative"
@@ -230,7 +225,7 @@ const Create = () => {
                       toast.error("File size exceeded the limit of 2MB");
                       return false;
                     }
-                    console.log([component.name], file);
+
                     setComponentValues({
                       ...componentValues,
                       [component.name]: file,
@@ -325,59 +320,96 @@ const Create = () => {
               placeholder="$ 0.00"
             />
           </div>
+          {isStaked && (
+            <button
+              className="bg-[#200F00] text-[#EFB359] flex justify-center items-center space-x-2  py-3 px-1 rounded-xl"
+              onClick={async () => {
+                if (!questName) {
+                  toast.error("Quest name is required");
+                  return;
+                }
+                if (!mainPicValue) {
+                  toast.error("Main picture is required");
+                  return;
+                }
+                if (stakePrice == "0") {
+                  toast.error("Stake price is required to be > 0");
+                  return;
+                }
 
-          <button
-            className="bg-[#200F00] text-[#EFB359] flex justify-center items-center space-x-2  py-3 px-1 rounded-xl"
-            onClick={async () => {
-              if (!questName) {
-                toast.error("Quest name is required");
-                return;
-              }
-              if (!mainPicValue) {
-                toast.error("Main picture is required");
-                return;
-              }
-              if (stakePrice == "0") {
-                toast.error("Stake price is required to be > 0");
-                return;
-              }
-
-              toast.loading("Uploading files", {
-                id: "uploading",
-              });
-              const tokenUri = await storeFile(
-                mainPicValue,
-                questName,
-                "this is a sample quest"
-              );
-              console.log(tokenUri);
-              const { request } = await prepareWriteContract({
-                address: EscrowAccount.address as `0x${string}`,
-                abi: EscrowAccount.abi,
-                functionName: "stake",
-                args: [tokenUri],
-                value: parseEther(stakePrice),
-              });
-              const { hash } = await writeContract(request);
-              await waitForTransaction({ hash })
-                .then(() => console.log("transaction confirmed"))
-                .catch((error) => {
-                  toast.dismiss("uploading");
-                  console.log("error", error);
+                toast.loading("Uploading files", {
+                  id: "uploading",
                 });
-              toast.dismiss("uploading");
-              toast.success("Files uploaded successfully");
-            }}
-          >
-            <Image
-              src="/submit.svg"
-              alt="hero"
-              width={40}
-              height={40}
-              className="w-6 h-6"
-            />
-            {isStaked ? <h2> Submit Stake</h2> : <h2> Submit Components</h2>}
-          </button>
+                const tokenUri = await storeFile(
+                  mainPicValue,
+                  questName,
+                  "this is a sample quest"
+                );
+                const { request } = await prepareWriteContract({
+                  address: EscrowAccount.address as `0x${string}`,
+                  abi: EscrowAccount.abi,
+                  functionName: "stake",
+                  args: [tokenUri],
+                  value: parseEther(stakePrice),
+                });
+                const { hash } = await writeContract(request);
+                await waitForTransaction({ hash })
+                  .then(() => console.log("transaction confirmed"))
+                  .catch((error) => {
+                    toast.dismiss("uploading");
+                    console.log("error", error);
+                  });
+
+                toast.dismiss("uploading");
+                toast.success("Files uploaded successfully");
+                setIsStaked(true);
+              }}
+            >
+              <Image
+                src="/submit.svg"
+                alt="hero"
+                width={40}
+                height={40}
+                className="w-6 h-6"
+              />
+              <h2> Submit Stake</h2>
+            </button>
+          )}
+          {!isStaked && (
+            <button
+              className="bg-[#200F00] text-[#EFB359] flex justify-center items-center space-x-2  py-3 px-1 rounded-xl"
+              onClick={async () => {
+                const tokenUri = await storeFiles(componentValues);
+                console.log("tokenUri", tokenUri);
+                const { request } = await prepareWriteContract({
+                  address: NFTDrop.address as `0x${string}`,
+                  abi: NFTDrop.abi,
+                  functionName: "setBaseURI",
+                  args: [tokenUri],
+                });
+                const { hash } = await writeContract(request);
+                await waitForTransaction({ hash })
+                  .then(() => console.log("transaction confirmed"))
+                  .catch((error) => {
+                    toast.dismiss("uploading");
+                    console.log("error", error);
+                  });
+
+                toast.dismiss("uploading");
+                toast.success("Files uploaded successfully");
+                setIsStaked(true);
+              }}
+            >
+              <Image
+                src="/submit.svg"
+                alt="hero"
+                width={40}
+                height={40}
+                className="w-6 h-6"
+              />
+              <h2> Submit Components</h2>
+            </button>
+          )}
         </section>
       </div>
       <Footer className="mt-4" />

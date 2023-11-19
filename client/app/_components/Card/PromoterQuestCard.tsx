@@ -1,5 +1,6 @@
 import { PartnerDashboardQuest, QuestStatus } from "@/app/_lib/types";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const PartnerQuestCard = ({
@@ -11,7 +12,10 @@ const PartnerQuestCard = ({
   status,
 }: PartnerDashboardQuest) => {
   return (
-    <div className="w-[35vw] border my-2 border-black flex rounded-xl overflow-hidden ">
+    <Link
+      href="/promoter/dahboard/1"
+      className="w-[35vw] border my-2 border-black flex rounded-xl overflow-hidden "
+    >
       <section className="relative w-[48%] flex flex-col items-center overflow-hidden border p-2">
         <Image
           src={img}
@@ -87,7 +91,7 @@ const PartnerQuestCard = ({
           )}
         </section>
       </section>
-    </div>
+    </Link>
   );
 };
 
