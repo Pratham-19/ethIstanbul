@@ -1,9 +1,19 @@
+"use client";
+
 import Footer from "@/app/_components/Footer";
 import React from "react";
 import Image from "next/image";
 import { buttonVariants } from "@/app/_components/ui/button";
+import {
+  prepareWriteContract,
+  waitForTransaction,
+  writeContract,
+} from "wagmi/actions";
+import NFTDrop from "@/app/_abis/abi/NFTDrop.json";
+import toast from "react-hot-toast";
 
 export default function Dashboard({ params }: { params: { id: string } }) {
+  const [walletAddress, setWalletAddress] = React.useState("");
   const quests: {
     img: string;
   }[] = [
@@ -96,12 +106,36 @@ export default function Dashboard({ params }: { params: { id: string } }) {
           </section>
           <input
             placeholder="0x3423423"
-            className="bg-white border border-[#200F00] text-[#EFB359] py-3 px-1 rounded-r-xl outline-none w-[40%]"
+            value={walletAddress}
+            className="bg-white border border-[#200F00] text-[#EFB359] py-3 px-1 rounded-r-xl outline-none w-[50%]"
             type="string"
+            onChange={(e) => setWalletAddress(e.target.value)}
           />
         </div>
         <div className="flex justify-center items-center">
-          <section className="flex border bg-[#200F00] justify-center items-center space-x-2 p-3 rounded-l-xl">
+          <button
+            onClick={async () => {
+              toast.loading("Sending", {
+                id: "uploading",
+              });
+              const { request } = await prepareWriteContract({
+                address: NFTDrop.address as `0x${string}`,
+                abi: NFTDrop.abi,
+                functionName: "mintTaskCompletionNFT",
+                args: [walletAddress],
+              });
+              const { hash } = await writeContract(request);
+              await waitForTransaction({ hash })
+                .then(() => console.log("transaction confirmed"))
+                .catch((error) => {
+                  toast.dismiss("uploading");
+                  console.log("error", error);
+                });
+              toast.dismiss("uploading");
+              toast.success("Transaction confirmed");
+            }}
+            className="flex border bg-[#200F00] justify-center items-center space-x-2 p-3 rounded-xl"
+          >
             <Image
               src="/timer.svg"
               alt="hero"
@@ -110,7 +144,7 @@ export default function Dashboard({ params }: { params: { id: string } }) {
               className="w-6 h-6"
             />
             <h2 className="text-[#EFB359] ">Airdrop Piece</h2>
-          </section>
+          </button>
         </div>
       </section>
       <Footer />

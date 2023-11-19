@@ -2,12 +2,12 @@ import Image from "next/image";
 import React from "react";
 import { buttonVariants } from "../ui/button";
 
-const QuestCard = () => {
+const QuestCard = ({ img }: { img: string }) => {
   return (
     <div className="w-full border my-2 border-[hsl(var(--primary))] flex rounded-xl overflow-hidden ">
       <section className="w-[23%] flex justify-center items-center">
         <Image
-          src="/quest-hen.png"
+          src={img}
           alt="hen-quest"
           width={1024}
           height={1024}
