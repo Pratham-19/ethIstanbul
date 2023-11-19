@@ -10,6 +10,7 @@ import {
   gnosis,
   lineaTestnet,
   mantaTestnet,
+  chiliz,
   neonDevnet,
   polygonZkEvmTestnet,
   polygonMumbai,
