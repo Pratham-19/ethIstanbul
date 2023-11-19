@@ -53,6 +53,10 @@ ifeq ($(findstring --network sepolia,$(ARGS)),--network sepolia)
 	NETWORK_ARGS := --rpc-url $(SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) 
 endif
 
+ifeq ($(findstring --network polygonZkEVMTestnet,$(ARGS)),--network polygonZkEVMTestnet)
+	NETWORK_ARGS := --rpc-url $(POLYGON_ZKEVM_TESTNET_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(POLYGON_ZKEVM_SCAN_API_KEY) 
+endif
+
 ifeq ($(findstring --network polygonZkEVM,$(ARGS)),--network polygonZkEVM)
 	NETWORK_ARGS := --rpc-url $(POLYGON_ZKEVM_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(POLYGON_ZKEVM_SCAN_API_KEY) 
 endif
