@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.18;
 
-import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
 import {IChronicle} from "lib/chronicle-std/src/IChronicle.sol";
 
@@ -12,7 +13,7 @@ import {IChronicle} from "lib/chronicle-std/src/IChronicle.sol";
  * @notice This contract is used to list and buy NFTs.
  * @notice
  */
-contract MarketPlace {
+contract MarketPlace is IERC721Receiver {
     struct Listing {
         address seller;
         uint256 price;
@@ -59,8 +60,8 @@ contract MarketPlace {
 
         delete listings[tokenId];
 
-        uint256 totalPrice = (listing.price * uint256(chronicle.read())) / 1e18;
-        require(msg.value == totalPrice, "Incorrect price");
+        uint256 totalPrice = getPriceInETH(tokenId);
+        require(msg.value > totalPrice, "Incorrect price");
 
         (bool success,) = listing.seller.call{value: msg.value}("");
         require(success, "Transfer failed.");
@@ -70,7 +71,13 @@ contract MarketPlace {
         emit ItemSold(msg.sender, tokenId, listing.price);
     }
 
-    function getETHUSDPrice() external view returns (uint256) {
-        return chronicle.read();
+    function getPriceInETH(uint256 tokenId) public view returns (uint256 priceInETH) {
+        Listing memory listing = listings[tokenId];
+
+        priceInETH = ((listing.price * 1e18) / uint256(chronicle.read())) / 1e18;
+    }
+
+    function onERC721Received(address, address, uint256, bytes calldata) external pure override returns (bytes4) {
+        return this.onERC721Received.selector;
     }
 }

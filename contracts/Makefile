@@ -50,7 +50,7 @@ ifeq ($(findstring --network gnosis,$(ARGS)),--network gnosis)
 endif
 
 ifeq ($(findstring --network sepolia,$(ARGS)),--network sepolia)
-	NETWORK_ARGS := --rpc-url $(SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast
+	NETWORK_ARGS := --rpc-url $(SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY)
 endif
 
 ifeq ($(findstring --network polygonZkEVMTestnet,$(ARGS)),--network polygonZkEVMTestnet)
@@ -74,7 +74,7 @@ ifeq ($(findstring --network linea,$(ARGS)),--network arbGoerli)
 endif
 
 ifeq ($(findstring --network scrollSepolia,$(ARGS)),--network scrollSepolia)
-	NETWORK_ARGS := --rpc-url $(SCROLL_SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(SEPOLIA_SCAN_API_KEY) -vvvvv
+	NETWORK_ARGS := --rpc-url $(SCROLL_SEPOLIA_RPC_URL) --private-key $(DEV_PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(SEPOLIA_SCAN_API_KEY)
 endif
 
 ifeq ($(findstring --network celoTestnet,$(ARGS)),--network celoTestnet)

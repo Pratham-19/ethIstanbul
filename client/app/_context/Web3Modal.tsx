@@ -10,7 +10,6 @@ import {
   gnosis,
   lineaTestnet,
   mantaTestnet,
-  chiliz,
   neonDevnet,
   polygonZkEvmTestnet,
   polygonMumbai,
@@ -19,7 +18,7 @@ import {
 } from "viem/chains";
 import { useEffect, useState } from "react";
 
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "";
+const projectId = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDgyYzA4ZjM0OTlkOTgwNGNhOTMxNjVjYzAwRDVBMDI3YjczOTU1MjciLCJpc3MiOJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODI4NDQ2MjQxODAsIm5hbWUiOiJodWRkbGVodWIifQ.o3Ly1ifgCW2yVsTtmxl7JzyXyyx8GJJsKvwmvAK0QMY"
 
 const metadata = {
   name: "Monalizard",
